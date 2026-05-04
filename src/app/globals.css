@@ -6,7 +6,7 @@
   --color-background: var(--bg-color);
   --color-foreground: var(--text-color);
   --color-card: var(--card-color);
-  --color-primary: #FB8122;
+  --color-primary: #FD7306;
   --color-icon: var(--icon-color); /* Naya icon color variable */
 }
 
@@ -14,11 +14,11 @@
   --bg-color: #ffffff;
   --text-color: #000000;      /* Light mode text */
   --icon-color: #000000;      /* Light mode icons */
-  --card-color: #F5F5F5;
+  --card-color: #F0F0F0;
 }
 
 .dark {
-  --bg-color: #0b1120;
+  --bg-color: #090E2D;
   --text-color: #9CA3C9;      /* Dark mode text */
   --icon-color: #FFFFFF;      /* Dark mode icons */
   --card-color: #0C1445;

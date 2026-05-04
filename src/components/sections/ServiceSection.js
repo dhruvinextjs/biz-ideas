@@ -23,18 +23,20 @@ export default function ServiceSection() {
   ];
 
   return (
-    <section className="w-full py-12 px-4 bg-background transition-colors duration-300">
-      <div className="container mx-auto max-w-7xl">
+    // <section className="w-full px-4 bg-background transition-colors duration-300">
+    //   <div className="container mx-auto max-w-7xl">
+    <section className="w-full px-4 bg-background transition-colors duration-300">
+  <div className="container mx-auto max-w-7xl border-b-2 border-dotted border-[#E6E6E6] dark:border-[#1C234D] pb-14">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8 border-t border-dotted border-foreground/10 pt-8">
+        <div className="flex items-center justify-between mb-3 ">
           <h2 className="text-primary font-bold text-sm tracking-tight uppercase">
             Services
           </h2>
           <Link 
             href="#" 
-            className="flex items-center gap-1 text-[12px] text-foreground/50 hover:text-primary transition-colors font-medium"
+            className="flex items-center gap-1 text-[16px] text-[#4C4C4C] dark:text-[#9CB3C9] hover:text-primary transition-colors font-medium"
           >
-            View more <ChevronRight size={14} />
+            View more <ChevronRight size={14} className='mt-1'/>
           </Link>
         </div>
 
@@ -43,7 +45,7 @@ export default function ServiceSection() {
           {services.map((service, index) => (
             <div 
               key={index} 
-              className="group bg-[#F0F0F0] dark:bg-[#1A1F3D]/40 rounded-[24px] overflow-hidden flex flex-col cursor-pointer transition-all hover:shadow-lg border border-transparent dark:border-white/5"
+              className="group bg-card rounded-[24px] overflow-hidden flex flex-col cursor-pointer transition-all hover:shadow-lg border border-transparent dark:border-white/5"
             >
               {/* Image Container */}
               <div className="relative aspect-[16/10] overflow-hidden m-4 rounded-[18px]">
@@ -57,10 +59,10 @@ export default function ServiceSection() {
 
               {/* Content */}
               <div className="px-6 pb-8">
-                <h3 className="text-xl font-semibold text-foreground/90 group-hover:text-primary transition-colors mb-3">
+                <h3 className="text-xl font-normal text-icon group-hover:text-primary transition-colors mb-3">
                   {service.title}
                 </h3>
-                <p className="text-sm leading-relaxed text-[#4C4C4C] dark:text-[#9CB3C9]">
+                <p className="text-sm leading-relaxed text-icon">
                   {service.description}
                 </p>
               </div>

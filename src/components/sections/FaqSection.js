@@ -50,10 +50,10 @@ export default function FaqSection() {
   ];
 
   return (
-    <section className="w-full py-16 px-4 bg-background transition-colors duration-300">
-      <div className="container mx-auto max-w-5xl">
+    <section className="w-full py-3 px-4 bg-background transition-colors duration-300">
+      <div className="container mx-auto max-w-7xl">
         {/* Section Heading */}
-        <h2 className="text-[#FB8122] text-2xl md:text-3xl font-bold text-center mb-12">
+        <h2 className="text-[#FB8122] text-2xl font-bold text-center mb-2">
           Frequently Asked Questions
         </h2>
 
@@ -66,12 +66,12 @@ export default function FaqSection() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? -1 : index)}
-                className="w-full py-6 flex items-center justify-between text-left group transition-all"
+                className="w-full py-4 flex items-center justify-between text-left group transition-all"
               >
-                <span className="text-md md:text-lg font-medium text-foreground/90 group-hover:text-primary transition-colors">
+                <span className="text-md md:text-lg font-normal text-icon group-hover:text-primary transition-colors">
                   {faq.question}
                 </span>
-                <div className="shrink-0 ml-4 p-1 rounded-full border border-foreground/10 text-foreground/60">
+                <div className="shrink-0 ml-4 p-1 rounded-full border border-[#4C4C4C] dark:border-[#9CB3C9] text-icon">
                   {openIndex === index ? <Minus size={18} /> : <Plus size={18} />}
                 </div>
               </button>
@@ -92,7 +92,7 @@ export default function FaqSection() {
 
         {/* View More Button */}
         <div className="mt-12 flex justify-center">
-          <button className="flex items-center gap-2 px-6 py-2 border border-foreground/10 rounded-md text-sm font-medium hover:bg-foreground/5 transition-colors text-foreground/70">
+          <button className="flex items-center gap-2 px-6 py-2 border border-[#BBC2C8] dark:border-[#4A5E71] text-sm font-normal hover:bg-foreground/5 transition-colors text-[#4C4C4C] dark:text-[#9CB3C9]">
             View more <ChevronRight size={16} />
           </button>
         </div>

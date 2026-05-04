@@ -4,12 +4,10 @@ import { ArrowRight } from 'lucide-react';
 export default function Advertise() {
   return (
     <section className="w-full py-20 px-4 bg-background transition-colors duration-300">
-      <div className="container mx-auto max-w-5xl">
+      <div className="container mx-auto max-w-7xl">
         {/* Main Card Container */}
-        <div className="relative overflow-hidden rounded-[40px] px-6 py-16 md:py-24 text-center 
-          bg-[#F5F5F5] dark:bg-[#0A0D25] 
-          dark:bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] 
-          dark:from-[#1E2756] dark:via-[#0A0D25] dark:to-[#080B1C]"
+        <div className="relative overflow-hidden rounded-[40px] px-6 py-16 md:py-14 text-center 
+          bg-card"
         >
           {/* Subtle Diagonal Lines for Dark Mode */}
           <div className="absolute inset-0 opacity-10 pointer-events-none hidden dark:block 
@@ -19,13 +17,13 @@ export default function Advertise() {
 
           <div className="relative z-10 flex flex-col items-center">
             {/* Heading - Changes based on theme per screenshots */}
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 text-foreground">
+            <h2 className="text-2xl md:text-4xl font-semibold mb-4 text-icon">
               <span className="dark:inline hidden">Stay informed</span>
               <span className="inline dark:hidden">Stop overthinking. Start building.</span>
             </h2>
 
             {/* Subtext */}
-            <p className="text-sm md:text-lg text-foreground/60 mb-10 max-w-2xl">
+            <p className="text-sm md:text-lg text-[#4C4C4C] dark:text-[#9CB3C9] mb-10 max-w-2xl">
               Market insights that help you start and grow your business.
             </p>
 
@@ -35,8 +33,8 @@ export default function Advertise() {
                 type="email"
                 placeholder="Enter email address"
                 className="w-full h-14 md:h-16 pl-6 pr-16 rounded-full border border-foreground/10 
-                  bg-white dark:bg-[#1A1F3D] 
-                  text-foreground placeholder:text-foreground/40
+                  bg-white dark:bg-[#192468] 
+                  text-icon placeholder:text-[#AFD0F2]
                   focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all shadow-sm"
               />
               <button 

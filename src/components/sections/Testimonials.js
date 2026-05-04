@@ -6,28 +6,30 @@ const testimonials = [
     quote: "This is the kind of resource I wish I had when I started. Straight to the point, no fluff.",
     name: "Aarav",
     role: "Bootstrapped Founder",
-    avatar: "/images/avatar-1.png" // Apni image path use karein
+    avatar: "/images/person1.jpg" // Apni image path use karein
   },
   {
     quote: "Most content online is noise. This actually helps you think and move faster.",
     name: "Neha",
     role: "Facebook",
-    avatar: "/images/avatar-2.png"
+    avatar: "/images/person2.jpg"
   },
   {
     quote: "If you're building solo, this gives you clarity without overwhelming you.",
     name: "Rohan",
     role: "SaaS Founder",
-    avatar: "/images/avatar-3.png"
+    avatar: "/images/person3.jpg"
   }
 ];
 
 export default function Testimonials() {
   return (
-    <section className="w-full py-16 px-4 bg-background transition-colors duration-300">
-      <div className="container mx-auto max-w-7xl">
+    // <section className="w-full py-4 px-4 bg-background transition-colors duration-300">
+    //   <div className="container mx-auto max-w-7xl">
+    <section className="w-full py-4 px-4 bg-background transition-colors duration-300">
+  <div className="container mx-auto max-w-7xl border-b-2 border-dotted border-[#E6E6E6] dark:border-[#1C234D] pb-10">
         {/* Header */}
-        <div className="mb-8 border-t border-dotted border-foreground/10 pt-8">
+        <div className="mb-3 pt-2">
           <h2 className="text-primary font-bold text-sm tracking-tight uppercase">
             Testimonials
           </h2>
@@ -38,11 +40,11 @@ export default function Testimonials() {
           {testimonials.map((item, index) => (
             <div 
               key={index} 
-              className="min-w-[300px] flex-1 bg-[#F0F0F0] dark:bg-[#1A1F3D]/50 p-8 rounded-[24px] flex flex-col justify-between transition-all border border-transparent dark:border-white/5"
+              className="min-w-[300px] flex-1 bg-card p-8 rounded-[24px] flex flex-col justify-between transition-all border border-transparent dark:border-white/5"
             >
               {/* Quote Section */}
               <div className="mb-10">
-                <p className="text-[17px] font-medium leading-relaxed text-foreground/90">
+                <p className="text-[18px] font-normal leading-relaxed text-icon">
                   "{item.quote}"
                 </p>
               </div>
