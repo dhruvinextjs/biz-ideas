@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Plus, MoreVertical, X, Clock, Check, Pencil } from "lucide-react";
 import { TbEdit } from "react-icons/tb";
 import { MdOutlineMail } from "react-icons/md";
 import { FaLinkedinIn, FaFacebookF, FaRedditAlien, FaTwitch, FaPinterestP, FaDribbble, FaBehance, FaDiscord, FaTumblr } from "react-icons/fa";
 import { FaInstagram, FaXTwitter, FaTelegram, FaWhatsapp, FaYoutube, FaTiktok, FaSnapchat } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { getSocialLinks } from "@/redux/slices/ProfileSlice";
  
 const EmailIcon     = () => <MdOutlineMail size={28} color="white" />;
 const LinkedInIcon  = () => <FaLinkedinIn  size={28} color="white" />;
@@ -160,6 +162,44 @@ export default function Profilepage() {
     </div>
   );
  
+  const dispatch = useDispatch();
+const { socialLinks: apiSocialLinks = [] } = useSelector(
+  (state) => state.profile
+);
+
+useEffect(() => {
+  dispatch(getSocialLinks());
+}, [dispatch]);
+
+console.log("API SOCIAL LINKS:", apiSocialLinks);
+
+
+useEffect(() => {
+  if (apiSocialLinks?.length > 0) {
+    const mapped = apiSocialLinks.map((item) => {
+      const platform = ALL_SOCIALS.find(
+        (s) => s.key === item.type // ⚠️ API key check करो
+      );
+
+      if (!platform) return null;
+
+      const { Icon, bg, label, key, iconColor } = platform;
+
+      const WrappedIcon = () => (
+        <Icon size={28} color={iconColor || "white"} />
+      );
+
+      return {
+        key,
+        Icon: WrappedIcon,
+        bg,
+        label,
+      };
+    }).filter(Boolean);
+
+    setSocialLinks(mapped);
+  }
+}, [apiSocialLinks]);
   return (
     <main className="min-h-screen bg-background text-foreground pt-24 md:pt-28">
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-8">

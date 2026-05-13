@@ -20,7 +20,7 @@ export default function ThankYouPage() {
         {/* Success Icon */}
         <div className="flex justify-center mb-6">
           <Image
-            src="/images/vector.png"
+            src="/images/vector1.png"
             alt="success"
             width={100}
             height={100}

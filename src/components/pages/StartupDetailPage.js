@@ -538,6 +538,7 @@ export default function DetailPage() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Business Overview
             </h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-500 dark:text-[#BACCDE]">
               Urban consumers increasingly prefer convenience and speed when it comes to daily essentials. Traditional grocery shopping is time-consuming, and existing delivery platforms often lack true “hyperlocal” efficiency.
 This startup focuses on building a hyperlocal grocery delivery platform that connects users with nearby stores, ensuring deliveries within 15–30 minutes. By optimizing logistics and leveraging local inventory, the platform delivers faster and more reliably than large-scale competitors.
@@ -570,6 +571,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-icon mb-4">
               How It Works
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300">
               <li className="dark:text-[#BACCDE] text-sm">
                 <strong className="text-icon font-semibold">
@@ -602,6 +604,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-icon mb-4">
               Revenue Model
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm dark:text-[#BACCDE] mb-4">
               Subscription-based model with tiered pricing based on ticket
               volume.
@@ -629,6 +632,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-icon mb-6">
               Execution Breakdown
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -681,6 +685,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Tech Stack & Tools Required
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-[#BACCDE]">
               <li>
                 <strong className="text-gray-900 dark:text-white font-semibold">
@@ -713,6 +718,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Marketing Strategy (How to get first 10 customers)
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
               Build a targeted list of prospects using Omni-channel. Offer them
               a free trial of a custom chatbot for their brand. Partner with
@@ -727,6 +733,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Conclusion
             </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
               B2B is highly lucrative. High margin business. You build the tech
               tool exclusively, no one requires a big team, and earning beyond a
@@ -854,7 +861,7 @@ This startup focuses on building a hyperlocal grocery delivery platform that con
                 <label className="block text-sm font-normal text-icon mb-2">
                   Country <span className="text-red-500">*</span>
                 </label>
-                <select className="w-full bg-gray-200 dark:bg-[#1D2659] border border-transparent dark:border-[#3E4A92] rounded-md p-2.5 text-sm text-white focus:outline-none focus:border-primary">
+                <select className="w-full bg-gray-200 dark:bg-[#1D2659] border border-transparent dark:border-[#3E4A92] rounded-md p-2.5 text-sm text-icon focus:outline-none focus:border-primary">
                   <option>Select</option>
                   <option>United States</option>
                   <option>India</option>

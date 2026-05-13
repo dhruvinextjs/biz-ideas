@@ -379,8 +379,8 @@ export default function CaseStudiesPage() {
                 <div className="space-y-3">
                   {["Newest", "Oldest", "Highest Revenue", "Lowest Revenue"].map((opt, idx) => (
                     <label key={idx} className="flex items-center gap-3 cursor-pointer group">
-                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${idx === 0 ? 'border-primary' : 'border-gray-400 dark:border-[#CCCCCC]'}`}>
-                        {idx === 0 && <div className="w-2 h-2 bg-primary rounded-full"></div>}
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${idx === 0 ? 'border-[#0059DE]' : 'border-gray-400 dark:border-[#CCCCCC]'}`}>
+                        {idx === 0 && <div className="w-2 h-2 bg-[#0059DE] rounded-full"></div>}
                       </div>
                       <span className="text-sm dark:text-[#CCCCCC] group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                         {opt}
@@ -410,7 +410,7 @@ export default function CaseStudiesPage() {
                     <label key={idx} className="flex items-center gap-3 cursor-pointer group">
                       <input
                         type="checkbox"
-                        className="w-4 h-4 rounded border-gray-400 dark:border-white/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background accent-[#FB8122]"
+                        className="w-4 h-4 rounded border-gray-400 dark:border-white/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background accent-[#0059DE]"
                       />
                       <span className="text-sm group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                         {opt}
@@ -510,17 +510,17 @@ export default function CaseStudiesPage() {
 function DualRangeMock({ leftValue, rightValue }) {
   return (
     <div>
-      <div className="relative h-1 bg-gray-300 dark:bg-white/10 rounded-full mb-4 mt-2 mx-2">
-        <div className="absolute left-[20%] right-[30%] h-full bg-primary rounded-full"></div>
-        <div className="absolute left-[20%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-primary rounded-full shadow cursor-pointer"></div>
-        <div className="absolute right-[30%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-primary rounded-full shadow cursor-pointer"></div>
+      <div className="relative h-1 bg-gray-300 dark:bg-[#D9D9D9] rounded-full mb-4 mt-2 mx-2">
+        <div className="absolute left-[20%] right-[30%] h-full bg-[#0059DE] rounded-full"></div>
+        <div className="absolute left-[20%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#0059DE] rounded-full shadow cursor-pointer"></div>
+        <div className="absolute right-[30%] top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-[#0059DE] rounded-full shadow cursor-pointer"></div>
       </div>
       <div className="flex items-center justify-between gap-3">
-        <div className="flex-1 bg-background border border-gray-300 dark:border-white/10 rounded-md p-2 flex items-center justify-center">
+        <div className="flex-1 dark:bg-[#1D2659] border border-gray-300 dark:border-white/10 rounded-md p-2 flex items-center justify-center">
           <span className="text-sm text-gray-900 dark:text-white">{leftValue}</span>
         </div>
         <span className="text-sm text-gray-500">to</span>
-        <div className="flex-1 bg-background border border-gray-300 dark:border-white/10 rounded-md p-2 flex items-center justify-center">
+        <div className="flex-1 dark:bg-[#1D2659] border border-gray-300 dark:border-white/10 rounded-md p-2 flex items-center justify-center">
           <span className="text-sm text-gray-900 dark:text-white">{rightValue}</span>
         </div>
       </div>

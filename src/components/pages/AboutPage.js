@@ -33,16 +33,17 @@ export default function AboutPage() {
         {/* ========================================== */}
         <section className="text-center mb-16 relative">
           {/* Divider Line */}
-          <div className="absolute top-12 left-0 right-0 h-px bg-gray-200 dark:bg-white/5 -z-10"></div>
+          {/* <div className="absolute top-12 left-0 right-0 h-px bg-gray-200 dark:bg-white/5 -z-10"></div> */}
           
+          <div className="absolute top-[55px]  left-0 right-0 h-px bg-gray-200 dark:bg-[#292F57] z-10"></div>
           {/* Founder Image */}
-          <div className="inline-block bg-background p-2 rounded-full mb-14">
+          <div className="inline-block bg-background z-50 rounded-full relative mb-14">
             <Image
               src="/images/chirag.png" // Yahan apni profile image ka URL daal dena
               alt="Chirag Panchal"
               width={100}
               height={100}
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover shadow-md border border-gray-200 dark:border-white/10"
+              className="w-24 h-24 md:w-28 md:h-28 z-50 rounded-full object-cover shadow-md border border-gray-200 dark:border-white/10"
             />
           </div>
 

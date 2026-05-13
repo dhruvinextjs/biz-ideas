@@ -386,6 +386,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { IoGridSharp, IoList } from "react-icons/io5";
 
 // Mock data: Data na hone par ise [] kar dein check karne ke liye
 const ideaCards = [
@@ -491,7 +492,7 @@ export default function AppIdeaListing() {
                   : "text-foreground hover:text-gray-900 dark:hover:text-white"
               }`}
             >
-              <Grid size={18} />
+              <IoGridSharp size={18} />
             </button>
             <button
               onClick={() => setViewMode("list")}
@@ -501,7 +502,7 @@ export default function AppIdeaListing() {
                   : "text-foreground hover:text-gray-900 dark:hover:text-white"
               }`}
             >
-              <List size={18} />
+              <IoList size={18} />
             </button>
           </div>
         </div>
@@ -545,7 +546,7 @@ export default function AppIdeaListing() {
               />
             </div>
 
-            <button className="w-full mt-8 bg-[#FB8122] text-white font-bold py-3 rounded-full transition-colors uppercase tracking-wide text-sm">
+            <button className="w-full mt-8 bg-[#FB8122] text-white font-semibold py-3 rounded-full transition-colors tracking-wide text-md">
               Apply Filters
             </button>
           </div>
@@ -588,8 +589,8 @@ export default function AppIdeaListing() {
                         <p className="text-sm leading-relaxed mb-4 min-h-[65px]">
                           {card.desc}
                         </p>
-                        <div className="flex items-end justify-between mt-auto pt-4 border-t border-gray-200 dark:border-white/10">
-                          <div className="flex gap-6">
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-200 dark:border-white/10">
+  <div className="flex items-center gap-15">
                             <div>
                               <p className="text-sm text-[#4C4C4C] dark:text-[#9CB3C9] tracking-wider mb-1">
                                 Invest
@@ -719,7 +720,7 @@ function FilterSection({ title, options, checkedIndex = -1 }) {
             <input
               type="checkbox"
               defaultChecked={idx === checkedIndex}
-              className="w-4 h-4 rounded border-gray-400 dark:border-white/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background accent-[#FB8122]"
+              className="w-4 h-4 rounded border-gray-400 dark:border-white/20 bg-transparent text-primary focus:ring-primary focus:ring-offset-background accent-[#0059DE]"
             />
             <span className="text-sm group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
               {opt}

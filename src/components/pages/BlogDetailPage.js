@@ -56,7 +56,9 @@ export default function BlogDetailPage() {
             Insights, trends, and guides to help you build and scale your next startup.
           </p>
 
-          <div className="flex items-center flex-wrap gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+
+          <div className="flex items-center flex-wrap gap-4 border-b-2 border-dashed border-gray-200 dark:border-[#1C234D] pb-6">
             {/* Category Badge */}
             <span className="bg-gray-200 dark:bg-[#2A3265] text-gray-700 dark:text-gray-300 text-xs font-bold tracking-wider px-4 py-1.5 rounded-full uppercase">
               IDEAS

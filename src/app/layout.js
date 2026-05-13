@@ -2,15 +2,14 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { Source_Sans_3 } from "next/font/google";
+import Providers from "./providers";
+import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sourceSans = Source_Sans_3({
+  variable: "--font-source-sans",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"], // jitna chahiye
 });
 
 export const metadata = {
@@ -22,9 +21,9 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+       className={`${sourceSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><Header/>{children}<Footer/></body>
+      <body className="min-h-full flex flex-col"><Header/><Providers>{children}   <Toaster position="top-right" /></Providers><Footer/></body>
     </html>
   );
 }

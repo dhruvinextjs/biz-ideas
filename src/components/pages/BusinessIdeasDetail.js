@@ -35,7 +35,8 @@ const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground font-sans transition-colors duration-300 pb-20">
       {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300">
+        // <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-300">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#040926B2] backdrop-blur-[10px] transition-all duration-300">
           <div className="bg-card border border-gray-200 dark:border-white/10 w-full max-w-xl rounded-2xl shadow-2xl relative overflow-hidden">
             
             {/* Close Button */}
@@ -214,6 +215,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-icon mb-4">
               How It Works
             </h2>
+         <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300">
               <li className="dark:text-[#BACCDE] text-sm">
                 <strong className="text-icon font-semibold">
@@ -246,6 +248,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-icon mb-4">
               Revenue Model
             </h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm dark:text-[#BACCDE] mb-4">
               Subscription-based model with tiered pricing based on ticket
               volume.
@@ -273,6 +276,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-icon mb-6">
               Execution Breakdown
             </h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -325,6 +329,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Tech Stack & Tools Required
             </h2>
+             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-[#BACCDE]">
               <li>
                 <strong className="text-gray-900 dark:text-white font-semibold">
@@ -357,6 +362,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Marketing Strategy (How to get first 10 customers)
             </h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
               Build a targeted list of prospects using Omni-channel. Offer them
               a free trial of a custom chatbot for their brand. Partner with
@@ -371,6 +377,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
               Conclusion
             </h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
               B2B is highly lucrative. High margin business. You build the tech
               tool exclusively, no one requires a big team, and earning beyond a
@@ -410,7 +417,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
                 className="w-full bg-gray-100 dark:bg-[#1A2342] border border-gray-200 dark:border-white/10 rounded-lg p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary min-h-[100px] mb-4 text-gray-900 dark:text-white placeholder-gray-500"
                 placeholder="Share your thoughts or ask a question..."
               ></textarea>
-              <button className="bg-primary text-white px-8 py-3 rounded-full text-sm font-semibold transition-colors">
+              <button className="bg-primary text-white px-8 py-3 rounded-full text-xs font-semibold transition-colors">
                 POST COMMENT
               </button>
             </div>
@@ -501,7 +508,7 @@ const [isModalOpen, setIsModalOpen] = useState(false);
                 <label className="block text-sm font-normal text-icon mb-2">
                   Country <span className="text-red-500">*</span>
                 </label>
-                <select className="w-full bg-gray-200 dark:bg-[#1D2659] border border-transparent dark:border-[#3E4A92] rounded-md p-2.5 text-sm text-white focus:outline-none focus:border-primary">
+                <select className="w-full bg-gray-200 dark:bg-[#1D2659] border border-transparent dark:border-[#3E4A92] rounded-md p-2.5 text-sm text-icon focus:outline-none focus:border-primary">
                   <option>Select</option>
                   <option>United States</option>
                   <option>India</option>

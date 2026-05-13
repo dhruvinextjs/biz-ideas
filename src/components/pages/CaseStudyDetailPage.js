@@ -101,7 +101,7 @@ export default function CaseStudyDetailPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3 mb-10 pb-8 border-b border-gray-200 dark:border-white/10">
+          <div className="flex flex-wrap gap-3 mb-10 pb-8 border-b-2 border-dotted border-gray-200 dark:border-white/10">
             <div className="flex gap-3 w-full">
                   <button className="flex items-center gap-2 bg-[#2D3B82] hover:bg-[#232e66] text-white px-1 py-2 rounded-2xl text-xs font-medium transition-colors w-40 justify-center">
               <Download size={16} /> Download PDF
@@ -142,6 +142,7 @@ export default function CaseStudyDetailPage() {
           
           <section id="company-overview">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Company Overview</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox is a sustainable packaging startup focused on replacing single-use plastic with eco-friendly alternatives. The company provides biodegradable and recyclable packaging solutions to restaurants, e-commerce brands, and local businesses aiming to reduce their environmental impact.
             </p>
@@ -149,6 +150,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="founder-story">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Founder Story</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox was founded by a young entrepreneur who realized the growing demand for sustainable solutions while working with small local businesses. With a clear problem to solve and a goal to provide affordable green packaging, the founder decided to launch EcoBox with a mission to make sustainability accessible for everyone.
             </p>
@@ -176,6 +178,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="business-model">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Business Model</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox operates on a B2B model, supplying packaging in bulk to businesses. Revenue is generated through direct sales, subscription-based repeat orders, and long term contracts with growing brands.
             </p>
@@ -183,6 +186,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="revenue">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Revenue</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               Within 12 months, EcoBox achieved ₹10L in monthly recurring revenue by focusing on repeat customers and consistent B2B orders.
             </p>
@@ -190,6 +194,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="funding">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Funding</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox started as a bootstrapped venture with minimal initial investment. As traction grew, the income was reinvested into expanding operations rather than relying on external funding.
             </p>
@@ -197,6 +202,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="growth">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Growth</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox scaled rapidly by targeting niche markets like cloud kitchens and D2C brands. Strong word of mouth and repeat clients played a major role in consistent growth.
             </p>
@@ -204,6 +210,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="marketing-strategy">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Marketing Strategy</h2>
+               <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               The brand focused on digital marketing, including social media awareness campaigns, sustainability-focused content, and targeted ads for local businesses. Educational content about eco-friendly packaging helped build trust and authority.
             </p>
@@ -211,6 +218,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="first-customers">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">How They Got First Customers</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300">
               EcoBox acquired its first customers through direct outreach, local networking, and offering free samples. Early adopters were small restaurants willing to experiment with sustainable packaging.
             </p>
@@ -218,6 +226,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="lessons">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Lessons</h2>
+              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="list-disc pl-5 space-y-2 text-sm md:text-base text-gray-700 dark:text-gray-300">
               <li>Start with a niche market</li>
               <li>Focus on solving a real problem</li>
@@ -229,6 +238,7 @@ export default function CaseStudyDetailPage() {
 
           <section id="similar-business">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">How You Can Start Similar Business</h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm md:text-base leading-relaxed text-gray-700 dark:text-gray-300 mb-6">
               Identify a gap in the local market, validate demand, and start small with a focused audience. Build strong supplier relationships, test your product with early users, and scale gradually using feedback and reinvested profits.
             </p>
