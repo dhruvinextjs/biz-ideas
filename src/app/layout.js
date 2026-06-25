@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       lang="en"
        className={`${sourceSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><Header/><Providers>{children}   <Toaster position="top-right" /></Providers><Footer/></body>
+      <body className="min-h-full flex flex-col"><Providers><Header/>{children}   <Toaster position="top-right" /></Providers><Footer/></body>
     </html>
   );
 }

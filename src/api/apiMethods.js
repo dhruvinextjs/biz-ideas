@@ -8,7 +8,7 @@ const API = axios.create({
 });
 
 API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token"); // 👈 yaha se lo
+  const token = localStorage.getItem("token");
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -20,7 +20,7 @@ API.interceptors.request.use((config) => {
 // ================= GET =================
 export const GetUrl = async (endpoint, config = {}) => {
   try {
-    const response = await API.get(endpoint, config);
+    const response = await API.get(endpoint, config); 
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
@@ -32,7 +32,7 @@ export const PostUrl = async (endpoint, data, config = {}) => {
   try {
     const response = await API.post(endpoint, data, config);
     return response.data;
-  } catch (error) {
+  } catch (error) {     
     throw error.response?.data || error.message;
   }
 };

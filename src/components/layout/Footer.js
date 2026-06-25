@@ -225,7 +225,7 @@ export default function Footer() {
                   <FaFacebookF
                     size={18}
                     className="cursor-pointer hover:text-primary transition-colors"
-                  />
+                  />  
                   <FaXTwitter
                     size={18}
                     className="cursor-pointer hover:text-primary transition-colors"

@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Bell, Lock, LogOut } from "lucide-react";
 import { IoEyeOffOutline } from "react-icons/io5";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import { changePassword } from "@/redux/slices/AuthSlice";
+import { getNotificationSettings, updateNotificationSettings } from "@/redux/slices/SettingSlice";
+import toast from "react-hot-toast";
+
+import { useRouter } from "next/navigation";
 
 const navItems = [
   { id: "email", label: "Email Notifications", icon: Bell },
@@ -11,11 +17,38 @@ const navItems = [
 ];
 
 export default function Setting() {
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("email");
   const [toggles, setToggles] = useState({
-    newBusinessIdeas: true,
-    marketingEmails: true,
+    newBusinessIdeas: false,
+    marketingEmails: false,
   });
+
+  const router = useRouter();
+
+
+
+  const { notificationSettings, updateLoading } = useSelector((state) => state.settings);
+
+  // ✅ Redux state se sync karo
+  // const [toggles, setToggles] = useState({
+  //   newBusinessIdeas: false,
+  //   marketingEmails: false,
+  // });
+
+  // ✅ API se data aane par toggles sync karo
+  useEffect(() => {
+    dispatch(getNotificationSettings());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (notificationSettings) {
+      setToggles({
+        newBusinessIdeas: notificationSettings.newBusinessIdeas ?? false,
+        marketingEmails: notificationSettings.marketingEmails ?? false,
+      });
+    }
+  }, [notificationSettings]);
 
   const handleToggle = (key) => {
     setToggles((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -32,6 +65,25 @@ export default function Setting() {
     confirm: false,
   });
 
+  const handleUpdateNotifications = async () => {
+    const payload = {
+      newBusinessIdeas: toggles.newBusinessIdeas,
+      marketingEmails: toggles.marketingEmails,
+    };
+
+    const result = await dispatch(updateNotificationSettings(payload));
+
+    if (updateNotificationSettings.fulfilled.match(result)) {
+      toast.success(result.payload?.message || "Settings updated successfully", {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Failed to update settings. Please try again.", {
+        position: "top-right",
+      });
+    }
+  };
+
   const handlePasswordChange = (key, value) => {
     setPasswords((prev) => ({ ...prev, [key]: value }));
   };
@@ -39,6 +91,39 @@ export default function Setting() {
   const toggleShowPassword = (key) => {
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
+  const handleUpdatePassword = async () => {
+    if (!passwords.current || !passwords.new || !passwords.confirm) {
+      return toast.error("All fields are required");
+    }
+
+    if (passwords.new !== passwords.confirm) {
+      return toast.error("New password and confirm password do not match");
+    }
+
+
+
+    const payload = {
+      currentPassword: passwords.current,
+      newPassword: passwords.new,
+      confirmPassword: passwords.confirm,
+    };
+
+    dispatch(changePassword(payload));
+  };
+
+
+  const handleSignOut = () => {
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("token");
+
+  toast.success("Signed out successfully!", { position: "top-right" });
+
+  // ✅ Hard redirect
+  setTimeout(() => {
+    window.location.href = "/";
+  }, 1000);
+};
 
   return (
     <main className="min-h-screen bg-background pt-32 md:pt-36 pb-16 px-4">
@@ -60,11 +145,10 @@ export default function Setting() {
                 key={id}
                 onClick={() => setActiveTab(id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 mb-1
-                                ${
-                                  activeTab === id
-                                    ? "bg-[#3E4A92] text-white"
-                                    : "text-foreground hover:bg-[#111d55] hover:text-white"
-                                }`}
+                                ${activeTab === id
+                    ? "bg-[#3E4A92] text-white"
+                    : "text-foreground hover:bg-[#111d55] hover:text-white"
+                  }`}
               >
                 <Icon size={16} />
                 {label}
@@ -72,7 +156,10 @@ export default function Setting() {
             ))}
 
             {/* Sign Out */}
-            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-[#111d55] transition-all duration-200">
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-[#111d55] transition-all duration-200"
+            >
               <LogOut size={16} />
               Sign out
             </button>
@@ -117,17 +204,16 @@ export default function Setting() {
                         onClick={() => handleToggle(item.key)}
                         style={{
                           backgroundColor: toggles[item.key]
-                            ? "#a8aab1"
-                            : "#0059DE",
+                            ? "#0059DE"
+                            : "#a8aab1",
                         }}
                         className="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none"
                       >
                         <span
-                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${
-                            toggles[item.key]
-                              ? "translate-x-5"
-                              : "translate-x-0"
-                          }`}
+                          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${toggles[item.key]
+                            ? "translate-x-5"
+                            : "translate-x-0"
+                            }`}
                         />
                       </button>
                     </div>
@@ -135,8 +221,12 @@ export default function Setting() {
                 </div>
 
                 {/* Update Button */}
-                <button className="mt-2 mb-2 px-9 py-3 ml-2 rounded-full bg-primary text-white text-xs font-bold tracking-widest uppercase hover:opacity-90 active:scale-95 transition-all">
-                  UPDATE
+                <button
+                  onClick={handleUpdateNotifications}
+                  disabled={updateLoading}
+                  className="mt-2 mb-2 px-9 py-3 ml-2 rounded-full bg-primary text-white text-xs font-bold tracking-widest uppercase hover:opacity-90 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updateLoading ? "UPDATING..." : "UPDATE"}
                 </button>
               </>
             )}
@@ -185,7 +275,10 @@ export default function Setting() {
                   </div>
                 ))}
 
-                <button className="mt-4 px-8 py-2.5 rounded-full bg-primary text-white text-xs font-bold tracking-widest uppercase hover:opacity-90 active:scale-95 transition-all">
+                <button
+                  onClick={handleUpdatePassword}
+                  className="mt-4 px-8 py-2.5 rounded-full bg-primary text-white text-xs font-bold tracking-widest uppercase hover:opacity-90 active:scale-95 transition-all"
+                >
                   UPDATE
                 </button>
               </>
