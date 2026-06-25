@@ -389,8 +389,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBusinessIdeas, fetchFilteredIdeas  } from "@/redux/slices/BusinessideasSlice"; 
+import { fetchBusinessIdeas, fetchFilteredIdeas } from "@/redux/slices/BusinessideasSlice";
 import { toast } from "react-hot-toast";
+import {BASE_URL} from "@/api/apiConfig"
 import {
   Filter,
   ArrowRight,
@@ -401,22 +402,22 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { IoGridSharp, IoList } from "react-icons/io5";
-  
+
 export default function ListingPage() {
   const [viewMode, setViewMode] = useState("grid");
 
   const dispatch = useDispatch();
   // Redux store se values access karna
- const [selectedFilters, setSelectedFilters] = useState({
-  investment: "",
-  industry: "",
-  teamSize: "",
-  profitMargin: "",
-});
+  const [selectedFilters, setSelectedFilters] = useState({
+    investment: "",
+    industry: "",
+    teamSize: "",
+    profitMargin: "",
+  });
 
-const { ideas, loading, error, totalCount, filterLoading } = useSelector(
-  (state) => state.businessIdeas
-);
+  const { ideas, loading, error, totalCount, filterLoading } = useSelector(
+    (state) => state.businessIdeas
+  );
 
 
 
@@ -425,38 +426,38 @@ const { ideas, loading, error, totalCount, filterLoading } = useSelector(
   }, [dispatch]);
 
   const handleFilterChange = (category, value) => {
-  setSelectedFilters((prev) => ({
-    ...prev,
-    // ✅ Same value dobara click karo to deselect ho
-    [category]: prev[category] === value ? "" : value,
-  }));
-};
+    setSelectedFilters((prev) => ({
+      ...prev,
+      // ✅ Same value dobara click karo to deselect ho
+      [category]: prev[category] === value ? "" : value,
+    }));
+  };
 
-const handleApplyFilters = async () => {
-  const hasFilter = Object.values(selectedFilters).some((v) => v !== "");
+  const handleApplyFilters = async () => {
+    const hasFilter = Object.values(selectedFilters).some((v) => v !== "");
 
-  if (!hasFilter) {
-    // Koi filter nahi → sab fetch karo
-    dispatch(fetchBusinessIdeas());
-    return;
-  }
+    if (!hasFilter) {
+      // Koi filter nahi → sab fetch karo
+      dispatch(fetchBusinessIdeas());
+      return;
+    }
 
-  const result = await dispatch(fetchFilteredIdeas(selectedFilters));
+    const result = await dispatch(fetchFilteredIdeas(selectedFilters));
 
-  if (fetchFilteredIdeas.fulfilled.match(result)) {
-    const count = result.payload?.count || 0;
-    toast.success(
-      count > 0
-        ? `${count} ideas found!`
-        : "No ideas found for selected filters",
-      { position: "top-right" }
-    );
-  } else {
-    toast.error("Failed to apply filters. Please try again.", {
-      position: "top-right",
-    });
-  }
-};
+    if (fetchFilteredIdeas.fulfilled.match(result)) {
+      const count = result.payload?.count || 0;
+      toast.success(
+        count > 0
+          ? `${count} ideas found!`
+          : "No ideas found for selected filters",
+        { position: "top-right" }
+      );
+    } else {
+      toast.error("Failed to apply filters. Please try again.", {
+        position: "top-right",
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -485,21 +486,19 @@ const handleApplyFilters = async () => {
           <div className="flex bg-card rounded-md p-1 border border-gray-200 dark:border-white/5">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded ${
-                viewMode === "grid"
-                  ? "bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white"
-                  : "text-foreground hover:text-gray-900 dark:hover:text-white"
-              }`}
+              className={`p-1.5 rounded ${viewMode === "grid"
+                ? "bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white"
+                : "text-foreground hover:text-gray-900 dark:hover:text-white"
+                }`}
             >
               <IoGridSharp size={18} />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded ${
-                viewMode === "list"
-                  ? "bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white"
-                  : "text-foreground hover:text-gray-900 dark:hover:text-white"
-              }`}
+              className={`p-1.5 rounded ${viewMode === "list"
+                ? "bg-gray-200 dark:bg-white/10 text-gray-900 dark:text-white"
+                : "text-foreground hover:text-gray-900 dark:hover:text-white"
+                }`}
             >
               <IoList size={18} />
             </button>
@@ -509,54 +508,54 @@ const handleApplyFilters = async () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-  {/* Sidebar Filters */}
-<aside className="w-full lg:w-[280px] shrink-0">
-  <div className="bg-card rounded-xl p-6 border border-gray-200 dark:border-white/5 sticky top-8">
-    <div className="flex items-center gap-2 mb-6 text-icon border-b border-gray-200 dark:border-white/10 pb-4">
-      <Filter size={20} />
-      <h2 className="text-xl font-bold">Filters</h2>
-    </div>
+        {/* Sidebar Filters */}
+        <aside className="w-full lg:w-[280px] shrink-0">
+          <div className="bg-card rounded-xl p-6 border border-gray-200 dark:border-white/5 sticky top-8">
+            <div className="flex items-center gap-2 mb-6 text-icon border-b border-gray-200 dark:border-white/10 pb-4">
+              <Filter size={20} />
+              <h2 className="text-xl font-bold">Filters</h2>
+            </div>
 
-    <div className="space-y-6">
-      <FilterSection
-        title="INVESTMENT"
-        category="investment"
-        options={["$0 - $2K", "$2K - $5K", "$5K - $20K", "$20K+"]}
-        selectedValue={selectedFilters.investment}
-        onFilterChange={handleFilterChange}
-      />
-      <FilterSection
-        title="INDUSTRY"
-        category="industry"
-        options={["AI & Tech", "SaaS", "E-Commerce", "Local Business", "Services"]}
-        selectedValue={selectedFilters.industry}
-        onFilterChange={handleFilterChange}
-      />
-      <FilterSection
-        title="TEAM SIZE"
-        category="teamSize"
-        options={["Solo (1)", "Small (2-5)", "Medium (6-15)", "Large (15+)"]}
-        selectedValue={selectedFilters.teamSize}
-        onFilterChange={handleFilterChange}
-      />
-      <FilterSection
-        title="PROFIT MARGIN"
-        category="profitMargin"
-        options={["0-20%", "21-50%", "51-80%", "80%+"]}
-        selectedValue={selectedFilters.profitMargin}
-        onFilterChange={handleFilterChange}
-      />
-    </div>
+            <div className="space-y-6">
+              <FilterSection
+                title="INVESTMENT"
+                category="investment"
+                options={["$0 - $2K", "$2K - $5K", "$5K - $20K", "$20K+"]}
+                selectedValue={selectedFilters.investment}
+                onFilterChange={handleFilterChange}
+              />
+              <FilterSection
+                title="INDUSTRY"
+                category="industry"
+                options={["AI & Tech", "SaaS", "E-Commerce", "Local Business", "Services"]}
+                selectedValue={selectedFilters.industry}
+                onFilterChange={handleFilterChange}
+              />
+              <FilterSection
+                title="TEAM SIZE"
+                category="teamSize"
+                options={["Solo (1)", "Small (2-5)", "Medium (6-15)", "Large (15+)"]}
+                selectedValue={selectedFilters.teamSize}
+                onFilterChange={handleFilterChange}
+              />
+              <FilterSection
+                title="PROFIT MARGIN"
+                category="profitMargin"
+                options={["0-20%", "21-50%", "51-80%", "80%+"]}
+                selectedValue={selectedFilters.profitMargin}
+                onFilterChange={handleFilterChange}
+              />
+            </div>
 
-    <button
-      onClick={handleApplyFilters}
-      disabled={filterLoading}
-      className="w-full mt-8 bg-[#FB8122] text-white font-semibold py-3 rounded-full transition-colors tracking-wide text-md disabled:opacity-50 disabled:cursor-not-allowed"
-    >
-      {filterLoading ? "Applying..." : "Apply Filters"}
-    </button>
-  </div>
-</aside>
+            <button
+              onClick={handleApplyFilters}
+              disabled={filterLoading}
+              className="w-full mt-8 bg-[#FB8122] text-white font-semibold py-3 rounded-full transition-colors tracking-wide text-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {filterLoading ? "Applying..." : "Apply Filters"}
+            </button>
+          </div>
+        </aside>
         {/* Card Grid / List Container */}
         <div className="flex-1">
           {ideas.length > 0 ? (
@@ -580,8 +579,12 @@ const handleApplyFilters = async () => {
                         <div className="w-full h-full bg-gray-200 dark:bg-white/10 relative overflow-hidden rounded-lg">
                           {card.image && (
                             <Image
-                              src={card.image || "/images/startup-sketch.png"}
-                              alt="startup image"
+                              src={
+                                card.image
+                                  ? `${BASE_URL}${card.image}`
+                                  : "/images/startup-sketch.png"
+                              }
+                              alt={card.title}
                               fill
                               className="object-cover rounded-lg"
                             />
@@ -744,10 +747,9 @@ function PaginationButton({ children, active, disabled, icon }) {
     <button
       disabled={disabled}
       className={`w-9 h-9 flex items-center justify-center rounded-md text-sm transition-colors
-        ${
-          active
-            ? "bg-primary text-white font-medium"
-            : "bg-card text-foreground hover:bg-gray-200 dark:hover:bg-white/10"
+        ${active
+          ? "bg-primary text-white font-medium"
+          : "bg-card text-foreground hover:bg-gray-200 dark:hover:bg-white/10"
         }
         ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
       `}

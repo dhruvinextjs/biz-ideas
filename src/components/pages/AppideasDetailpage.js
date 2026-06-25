@@ -479,53 +479,154 @@ export default function DetailPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 mt-12 flex flex-col lg:flex-row gap-12">
         <div className="flex-1 space-y-10">
           <section>
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Business Overview</h2>
-            <p className="text-sm md:text-base leading-relaxed mb-4 text-gray-500 dark:text-[#BACCDE]">
-              {currentIdea.description}
-            </p>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Business Overview
+            </h2>
+           <p className="text-sm md:text-base leading-relaxed text-gray-500 dark:text-[#BACCDE]">
+  {currentIdea.businessOverview
+    ?.replace("Business Overview", "")
+    ?.trim()}
+</p>
           </section>
 
-          <div className="bg-[#082846] border border-[#1C8D99] rounded-xl p-6">
-            <h3 className="text-xl font-semibold text-white mb-2">Detailed Context</h3>
-            <p className="text-sm text-white leading-relaxed whitespace-pre-line">
-              {currentIdea.fullDescription || "No detailed description available for this idea."}
-            </p>
+          {/* Problem Box */}
+          <div className="bg-[#370D25] border border-[#BD0B0B] rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-white mb-2">
+              The Problem
+            </h3>
+           <p className="text-sm text-white leading-relaxed">
+  {currentIdea.problem?.replace("The Problem", "").trim()}
+</p>
           </div>
 
-          {currentIdea.tags && currentIdea.tags.length > 0 && (
-            <section>
-              <h2 className="text-xl font-semibold text-icon mb-4">Important Notes / Tags</h2>
-              <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-4"></div>
-              <div className="flex flex-wrap gap-2">
-                {currentIdea.tags.map((tag, index) => (
-                  <span key={index} className="bg-gray-200 dark:bg-[#1A2342] text-xs px-3 py-1.5 rounded-md text-gray-700 dark:text-gray-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </section>
-          )}
+          {/* Solution Box */}
+          <div className="bg-[#082846] border border-[#1C8D99] rounded-xl p-6">
+            <h3 className="text-xl font-semibold text-white mb-2">
+              The Solution
+            </h3>
+            <p className="text-sm text-white leading-relaxed">
+  {currentIdea.solution?.replace("The Solution", "").trim()}
+</p>
+          </div>
 
           <section>
-            <h2 className="text-xl font-semibold text-icon mb-6">Execution Breakdown</h2>
+            <h2 className="text-xl font-semibold text-icon mb-4">
+              How It Works
+            </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+            <ul className="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300">
+              {currentIdea.howItWorks
+                ?.filter((item) => item?.trim() && !item.includes("How It Works"))
+                .map((item, index) => (
+                  <li
+                    key={index}
+                    className="dark:text-[#BACCDE] text-sm"
+                  >
+                    {item}
+                  </li>
+                ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-icon mb-4">
+              Revenue Model
+            </h2>
+
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+
+            <ul className="space-y-3 text-sm dark:text-[#BACCDE]">
+              {currentIdea.revenueModel
+                ?.filter((item) => item?.trim() && !item.includes("Revenue Model"))
+                .map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+            </ul>
+          </section>
+
+          {/* Execution Breakdown Grid */}
+          <section>
+            <h2 className="text-xl font-semibold text-icon mb-6">
+              Execution Breakdown
+            </h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Investment Required</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 font-bold text-base">${currentIdea.investmentMin} - ${currentIdea.investmentMax}</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Server costs, API credits, initial marketing, software setup)</p>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Investment Required
+                </h4>
+
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {currentIdea.executionBreakdown?.investmentRequired}
+                </p>
+
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Required Team</h4>
-                <p className="text-sm text-gray-600 dark:text-[#BACCDE] font-semibold">{currentIdea.teamSize || "1-2 Founders"}</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Recommended execution human resource capability setup)</p>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Timeline to Launch
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea.executionBreakdown?.timeToLaunch}
+                </p>
+
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Profit Margin</h4>
-                <p className="text-sm text-gray-600 dark:text-[#BACCDE] font-bold text-base">{currentIdea.profitMargin}%+</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Low ongoing costs relative to business pricing strategy)</p>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Required Team
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea.executionBreakdown?.requiredTeam}
+                </p>
+
+              </div>
+              <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Profit Margin
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea.executionBreakdown?.profitMarginDetail}
+                </p>
+
               </div>
             </div>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Tech Stack & Tools Required
+            </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+            <ul className="space-y-3 text-sm text-gray-700 dark:text-[#BACCDE]">
+              {currentIdea.techStack
+                ?.filter((item) => item?.trim() && !item.includes("Tech Stack"))
+                .map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Marketing Strategy (How to get first 10 customers)
+            </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+            <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
+              {currentIdea.marketingStrategy
+                ?.replace("Marketing Strategy (How to get first 10 customers)", "")
+                ?.trim()}
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Conclusion
+            </h2>
+            <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
+       <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
+  {currentIdea.conclusion ||
+    currentIdea.tags?.[0]?.replace("Conclusion", "") ||
+    "No conclusion available."}
+</p>
           </section>
 
           {/* Actions */}
@@ -541,7 +642,7 @@ export default function DetailPage() {
               <ThumbsUp size={16} fill={showLiked ? "currentColor" : "none"} />
               {likeLoading ? "..." : showLiked ? "Liked" : "Like"}
             </button>
-
+            {/* Save Button - replace karo */}
             <button
               onClick={handleSaveClick}
               disabled={toggleLoading}
@@ -553,11 +654,9 @@ export default function DetailPage() {
               <Bookmark size={16} fill={isBookmarked ? "currentColor" : "none"} />
               {toggleLoading ? "Saving..." : isBookmarked ? "Saved" : "Save"}
             </button>
-
             <button className="flex items-center gap-2 text-icon border border-gray-200 dark:border-[#363B57] hover:bg-gray-100 dark:hover:bg-white/5 px-4 py-2 text-sm font-normal transition-colors rounded-3xl">
               <Share2 size={16} /> Share
             </button>
-
             <button
               onClick={handleDownloadClick}
               className="flex items-center gap-2 text-white bg-[#2A357B] hover:bg-[#232e66] px-6 py-2 text-sm font-semibold transition-colors rounded-3xl shadow-lg shadow-blue-900/20"
@@ -566,12 +665,13 @@ export default function DetailPage() {
             </button>
           </div>
 
-          {/* ✅ Discussions — reply fully dynamic */}
+          {/* Discussions */}
           <section className="pt-0">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
               Discussions ({commentsCount})
             </h2>
 
+            {/* Comment Input */}
             <div className="mb-8">
               <textarea
                 value={commentText}
@@ -588,6 +688,7 @@ export default function DetailPage() {
               </button>
             </div>
 
+            {/* Comments List */}
             <div className="space-y-6">
               {commentsLoading ? (
                 <p className="text-sm text-gray-500">Loading comments...</p>
@@ -599,20 +700,20 @@ export default function DetailPage() {
                     <div className="w-10 h-10 rounded-full bg-[#2D3B82] flex items-center justify-center text-white font-bold shrink-0">
                       {comment.user?.name?.charAt(0)?.toUpperCase() || "U"}
                     </div>
-                    <div className="flex-1">
+                    <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-gray-900 dark:text-white text-sm">
                           {comment.user?.name || "Anonymous"}
                         </span>
                         <span className="text-xs text-gray-500">
                           {new Date(comment.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric", month: "short", day: "numeric",
+                            year: "numeric", month: "short", day: "numeric"
                           })}
                         </span>
                       </div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">{comment.text}</p>
-
-                      {/* ✅ Reply toggle button */}
+                      <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                        {comment.text}
+                      </p>
                       <button
                         onClick={() => handleReplyToggle(comment._id)}
                         className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary transition-colors"
@@ -620,7 +721,6 @@ export default function DetailPage() {
                         <CornerDownRight size={14} /> Reply ({comment.repliesCount ?? comment.replies?.length ?? 0})
                       </button>
 
-                      {/* ✅ Reply input box */}
                       {replyOpenId === comment._id && (
                         <div className="mt-3">
                           <textarea
@@ -639,7 +739,7 @@ export default function DetailPage() {
                         </div>
                       )}
 
-                      {/* ✅ Replies list */}
+                      {/* Replies List (from GET comments API) */}
                       {comment.replies && comment.replies.length > 0 && (
                         <div className="mt-4 ml-2 space-y-4 border-l-2 border-gray-200 dark:border-white/10 pl-4">
                           {comment.replies.map((reply, j) => (
@@ -654,11 +754,13 @@ export default function DetailPage() {
                                   </span>
                                   <span className="text-[10px] text-gray-500">
                                     {new Date(reply.createdAt).toLocaleDateString("en-US", {
-                                      year: "numeric", month: "short", day: "numeric",
+                                      year: "numeric", month: "short", day: "numeric"
                                     })}
                                   </span>
                                 </div>
-                                <p className="text-xs text-gray-700 dark:text-gray-300">{reply.text}</p>
+                                <p className="text-xs text-gray-700 dark:text-gray-300">
+                                  {reply.text}
+                                </p>
                               </div>
                             </div>
                           ))}

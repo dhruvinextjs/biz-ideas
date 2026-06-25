@@ -28,6 +28,7 @@ import { FaDollarSign } from "react-icons/fa6";
 import { BsGraphUpArrow } from "react-icons/bs";
 import { PiSquaresFourBold } from "react-icons/pi";
 import { useParams } from "next/navigation";
+import {BASE_URL} from "@/api/apiConfig"
 
 const initialContactState = {
   name: "",
@@ -62,7 +63,7 @@ const saveLikedIdeasToStorage = (ids) => {
 
 export default function DetailPage({ params }) {
   // const ideaId = params?.id || "6a210c3838b45075398b4a68";
-  const { id: ideaId } = useParams  ();
+  const { id: ideaId } = useParams();
 
   const dispatch = useDispatch();
   const {
@@ -136,42 +137,42 @@ export default function DetailPage({ params }) {
     setStep(1);
   };
 
- const handleFormSubmit = async (e) => {
-  e.preventDefault();
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!captchaData?.captchaId) {
-    toast.error("Captcha not loaded, please wait", { position: "top-right" });
-    dispatch(fetchCaptcha());
-    return;
-  }
+    if (!captchaData?.captchaId) {
+      toast.error("Captcha not loaded, please wait", { position: "top-right" });
+      dispatch(fetchCaptcha());
+      return;
+    }
 
-  const payload = {
-    name: contactForm.name.trim(),
-    email: contactForm.email.trim(),
-    country: contactForm.country,
-    phone: contactForm.phone.trim(),
-    projectRequirement: contactForm.projectRequirement.trim(),
-    captchaId: captchaData.captchaId,
-    captchaAnswer: Number(contactForm.captchaAnswer),
+    const payload = {
+      name: contactForm.name.trim(),
+      email: contactForm.email.trim(),
+      country: contactForm.country,
+      phone: contactForm.phone.trim(),
+      projectRequirement: contactForm.projectRequirement.trim(),
+      captchaId: captchaData.captchaId,
+      captchaAnswer: Number(contactForm.captchaAnswer),
+    };
+
+    const result = await dispatch(submitContactForm(payload));
+
+    if (submitContactForm.fulfilled.match(result)) {
+      toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
+      setContactForm(initialContactState);
+      dispatch(resetContactStatus());
+      dispatch(fetchCaptcha());
+      setStep(2); // ← success pe step 2 dikhao
+    } else {
+      const errMsg = typeof result.payload === "string"
+        ? result.payload
+        : result.payload?.message || "Failed to send message";
+      toast.error(errMsg, { position: "top-right" });
+      dispatch(fetchCaptcha());
+      setContactForm((prev) => ({ ...prev, captchaAnswer: "" }));
+    }
   };
-
-  const result = await dispatch(submitContactForm(payload));
-
-  if (submitContactForm.fulfilled.match(result)) {
-    toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
-    setContactForm(initialContactState);
-    dispatch(resetContactStatus());
-    dispatch(fetchCaptcha());
-    setStep(2); // ← success pe step 2 dikhao
-  } else {
-    const errMsg = typeof result.payload === "string"
-      ? result.payload
-      : result.payload?.message || "Failed to send message";
-    toast.error(errMsg, { position: "top-right" });
-    dispatch(fetchCaptcha());
-    setContactForm((prev) => ({ ...prev, captchaAnswer: "" }));
-  }
-};
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -384,90 +385,90 @@ export default function DetailPage({ params }) {
               <X size={24} />
             </button>
 
-           {step === 1 ? (
-  <div className="p-6 md:p-8">
-    <h2 className="text-2xl font-bold text-icon mb-1">Want to download PDF?</h2>
-    <p className="text-icon text-sm mb-6 font-light">Enter your details below to get instant access to the file.</p>
+            {step === 1 ? (
+              <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-icon mb-1">Want to download PDF?</h2>
+                <p className="text-icon text-sm mb-6 font-light">Enter your details below to get instant access to the file.</p>
 
-    <form onSubmit={handleFormSubmit} className="space-y-4">
-      <div>
-        <label className="block text-xs font-medium text-icon mb-1.5">Your name <span className="text-red-500">*</span></label>
-        <input
-          type="text" name="name" required
-          value={contactForm.name} onChange={handleContactChange}
-          placeholder="Type here..."
-          className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-        />
-      </div>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Your name <span className="text-red-500">*</span></label>
+                    <input
+                      type="text" name="name" required
+                      value={contactForm.name} onChange={handleContactChange}
+                      placeholder="Type here..."
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  </div>
 
-      <div>
-        <label className="block text-xs font-medium text-icon mb-1.5">Email <span className="text-red-500">*</span></label>
-        <input
-          type="email" name="email" required
-          value={contactForm.email} onChange={handleContactChange}
-          placeholder="example@mail.com"
-          className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-        />
-      </div>
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Email <span className="text-red-500">*</span></label>
+                    <input
+                      type="email" name="email" required
+                      value={contactForm.email} onChange={handleContactChange}
+                      placeholder="example@mail.com"
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-medium text-icon mb-1.5">Country <span className="text-red-500">*</span></label>
-          <select
-            name="country" required
-            value={contactForm.country} onChange={handleContactChange}
-            className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon focus:outline-none focus:ring-1 focus:ring-orange-500"
-          >
-            <option value="">Select</option>
-            <option>India</option>
-            <option>United States</option>
-            <option>United Kingdom</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-xs font-medium text-icon mb-1.5">Phone number <span className="text-red-500">*</span></label>
-          <input
-            type="tel" name="phone" required
-            value={contactForm.phone} onChange={handleContactChange}
-            placeholder="Type here..."
-            className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-          />
-        </div>
-      </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-icon mb-1.5">Country <span className="text-red-500">*</span></label>
+                      <select
+                        name="country" required
+                        value={contactForm.country} onChange={handleContactChange}
+                        className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon focus:outline-none focus:ring-1 focus:ring-orange-500"
+                      >
+                        <option value="">Select</option>
+                        <option>India</option>
+                        <option>United States</option>
+                        <option>United Kingdom</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-icon mb-1.5">Phone number <span className="text-red-500">*</span></label>
+                      <input
+                        type="tel" name="phone" required
+                        value={contactForm.phone} onChange={handleContactChange}
+                        placeholder="Type here..."
+                        className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                      />
+                    </div>
+                  </div>
 
-      <div>
-        <label className="block text-xs font-medium text-icon mb-1.5">Project Requirement (optional)</label>
-        <textarea
-          name="projectRequirement" rows="2"
-          value={contactForm.projectRequirement} onChange={handleContactChange}
-          placeholder="Type here..."
-          className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500 resize-none"
-        />
-      </div>
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Project Requirement (optional)</label>
+                    <textarea
+                      name="projectRequirement" rows="2"
+                      value={contactForm.projectRequirement} onChange={handleContactChange}
+                      placeholder="Type here..."
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500 resize-none"
+                    />
+                  </div>
 
-      {/* Dynamic Captcha */}
-      <div className="bg-white rounded-lg p-3 w-fit flex flex-col gap-2">
-        <label className="text-[10px] font-bold text-black uppercase">Captcha <span className="text-red-500">*</span></label>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-800 font-medium">
-            {captchaLoading ? "Loading..." : captchaData?.question ? `What is ${captchaData.question} ?` : "Unavailable"}
-          </span>
-          <input
-            type="text" name="captchaAnswer" required
-            value={contactForm.captchaAnswer} onChange={handleContactChange}
-            className="w-16 border border-gray-300 rounded px-2 py-1 text-black text-sm focus:outline-none"
-          />
-        </div>
-      </div>
+                  {/* Dynamic Captcha */}
+                  <div className="bg-white rounded-lg p-3 w-fit flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-black uppercase">Captcha <span className="text-red-500">*</span></label>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-gray-800 font-medium">
+                        {captchaLoading ? "Loading..." : captchaData?.question ? `What is ${captchaData.question} ?` : "Unavailable"}
+                      </span>
+                      <input
+                        type="text" name="captchaAnswer" required
+                        value={contactForm.captchaAnswer} onChange={handleContactChange}
+                        className="w-16 border border-gray-300 rounded px-2 py-1 text-black text-sm focus:outline-none"
+                      />
+                    </div>
+                  </div>
 
-      <button
-        type="submit" disabled={contactLoading}
-        className="w-full md:w-40 bg-[#FD7306] hover:bg-orange-600 text-white font-bold py-3 rounded-full transition-all text-sm uppercase tracking-wider disabled:opacity-50"
-      >
-        {contactLoading ? "SUBMITTING..." : "Submit"}
-      </button>
-    </form>
-  </div>
+                  <button
+                    type="submit" disabled={contactLoading}
+                    className="w-full md:w-40 bg-[#FD7306] hover:bg-orange-600 text-white font-bold py-3 rounded-full transition-all text-sm uppercase tracking-wider disabled:opacity-50"
+                  >
+                    {contactLoading ? "SUBMITTING..." : "Submit"}
+                  </button>
+                </form>
+              </div>
             ) : (
               /* STEP 2: DOWNLOAD FILE */
               <div className="p-10 flex flex-col items-center text-center">
@@ -530,11 +531,15 @@ export default function DetailPage({ params }) {
           {/* Hero Image - Dynamic URL Set Here */}
           <div className="w-full lg:w-[450px] shrink-0 h-[280px] relative rounded-2xl overflow-hidden shadow-lg border border-gray-200 dark:border-white/5">
             <Image
-              src={currentIdea.image || "/images/startup-sketch.png"}
+              src={
+                currentIdea.image
+                  ? `${BASE_URL}${currentIdea.image}`
+                  : "/images/startup-sketch.png"
+              }
               alt={currentIdea.title}
               fill
               className="object-cover"
-              unoptimized={currentIdea.image ? true : false} // Agar external API URL hai toh Next.js optimization domain error se bachne ke liye
+              unoptimized
             />
           </div>
         </div>
@@ -549,7 +554,7 @@ export default function DetailPage({ params }) {
               Business Overview
             </h2>
             <p className="text-sm md:text-base leading-relaxed text-gray-500 dark:text-[#BACCDE]">
-              {currentIdea.description}
+              {currentIdea.businessOverview}
             </p>
           </section>
 
@@ -559,7 +564,7 @@ export default function DetailPage({ params }) {
               The Problem
             </h3>
             <p className="text-sm text-white leading-relaxed">
-              {currentIdea.fullDescription}
+              {currentIdea.problem}
             </p>
           </div>
 
@@ -569,9 +574,7 @@ export default function DetailPage({ params }) {
               The Solution
             </h3>
             <p className="text-sm text-white leading-relaxed">
-              An AI model trained entirely on your database. It responds with
-              context, resolves basic support requests, and seamlessly transfers
-              complex issues to human agents.
+              {currentIdea.solution}
             </p>
           </div>
 
@@ -581,30 +584,17 @@ export default function DetailPage({ params }) {
             </h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300">
-              <li className="dark:text-[#BACCDE] text-sm">
-                <strong className="text-icon font-semibold">
-                  1. Data Ingestion :
-                </strong>{" "}
-                Connect databases, knowledge base, and past support tickets.
-              </li>
-              <li className="dark:text-[#BACCDE] text-sm">
-                <strong className="text-icon font-semibold">
-                  2. Training :
-                </strong>{" "}
-                The platform processes data to create accurate AI embeddings.
-              </li>
-              <li className="dark:text-[#BACCDE] text-sm">
-                <strong className="text-icon font-semibold">
-                  3. Deployment :
-                </strong>{" "}
-                The AI chatbot is integrated into client websites.
-              </li>
-              <li className="dark:text-[#BACCDE] text-sm">
-                <strong className="text-icon font-semibold">
-                  4. Workflow :
-                </strong>{" "}
-                AI filters queries and creates tickets for complex issues.
-              </li>
+              {currentIdea.howItWorks?.map((item, index) => (
+                <li
+                  key={index}
+                  className="dark:text-[#BACCDE] text-sm"
+                >
+                  {/* <strong className="text-icon font-semibold">
+                        Step {index + 1} :
+                      </strong>{" "} */}
+                  {item}
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -618,10 +608,12 @@ export default function DetailPage({ params }) {
               volume.
             </p>
             <ul className="space-y-2 text-sm dark:text-[#BACCDE]">
-              {" "}
-              {currentIdea.tags?.map((tag, index) => (
+              {currentIdea.revenueModel?.map((item, index) => (
                 <li key={index}>
-                  <strong className="text-icon font-semibold">Plan {index + 1} :</strong> {tag}
+                  <strong className="text-icon font-semibold">
+                    Revenue {index + 1} :
+                  </strong>{" "}
+                  {item}
                 </li>
               ))}
             </ul>
@@ -638,45 +630,38 @@ export default function DetailPage({ params }) {
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Investment Required
                 </h4>
+
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  ${currentIdea.investmentMin} - ${currentIdea.investmentMax}
+                  {currentIdea.executionBreakdown?.investmentRequired}
                 </p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">
-                  (Server costs, API credits, initial marketing, software setup)
-                </p>
+
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Timeline to Launch
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
-                  4 - 6 Weeks
+                  {currentIdea.executionBreakdown?.timeToLaunch}
                 </p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">
-                  (For building MVP and launching beta)
-                </p>
+
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Required Team
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
-                  {currentIdea.teamSize}
+                  {currentIdea.executionBreakdown?.requiredTeam}
                 </p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">
-                  (Recommended based on project scale)
-                </p>
+
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Profit Margin
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
-                  {currentIdea.profitMargin}%+
+                  {currentIdea.executionBreakdown?.profitMarginDetail}
                 </p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">
-                  (Low ongoing costs relative to subscription pricing)
-                </p>
+
               </div>
             </div>
           </section>
@@ -687,18 +672,14 @@ export default function DetailPage({ params }) {
             </h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-[#BACCDE]">
-              <li>
-                <strong className="text-gray-900 dark:text-white font-semibold">
-                  Type :
-                </strong>{" "}
-                {currentIdea.type}
-              </li>
-              <li>
-                <strong className="text-gray-900 dark:text-white font-semibold">
-                  Category :
-                </strong>{" "}
-                {currentIdea.category}
-              </li>
+              {currentIdea.techStack?.map((item, index) => (
+                <li key={index}>
+                  <strong className="text-gray-900 dark:text-white font-semibold">
+                    Tool {index + 1} :
+                  </strong>{" "}
+                  {item}
+                </li>
+              ))}
             </ul>
           </section>
 
@@ -708,12 +689,7 @@ export default function DetailPage({ params }) {
             </h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
-              Build a targeted list of prospects using Omni-channel. Offer them
-              a free trial of a custom chatbot for their brand. Partner with
-              agencies making them the exact strategy of "we reduce the support
-              tickets for their clients by 40%". Email the list with an approach
-              of offering value first, close deal later. Cold email {">"}{" "}
-              LinkedIn {">"} X {">"} YouTube.
+              {currentIdea.marketingStrategy}
             </p>
           </section>
 
@@ -723,10 +699,7 @@ export default function DetailPage({ params }) {
             </h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
-              B2B is highly lucrative. High margin business. You build the tech
-              tool exclusively, no one requires a big team, and earning beyond a
-              zero to one is high. Once the retention is built up nicely, MRR
-              expands to five and six figures within a year with minimal stress.
+              {currentIdea.conclusion}
             </p>
           </section>
 
@@ -973,8 +946,8 @@ export default function DetailPage({ params }) {
                       {captchaLoading
                         ? "Loading..."
                         : captchaData?.question
-                        ? `What is ${captchaData.question} ?`
-                        : "Unavailable"}
+                          ? `What is ${captchaData.question} ?`
+                          : "Unavailable"}
                     </span>
 
                     {/* Answer Input */}
