@@ -23,7 +23,7 @@ import {
   Share2,
   Download,
   CornerDownRight,
-    X,         
+  X,
   FileText,
 } from "lucide-react";
 import { FaDollarSign } from "react-icons/fa6";
@@ -47,7 +47,7 @@ const saveLikedIdeasToStorage = (ids) => {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(LIKED_IDEAS_KEY, JSON.stringify(ids));
-  } catch {}
+  } catch { }
 };
 
 export default function DetailPage() {
@@ -65,8 +65,8 @@ export default function DetailPage() {
 
   const [commentText, setCommentText] = useState("");
   const [likedIdeaIds, setLikedIdeaIds] = useState([]);
-const [isModalOpen, setIsModalOpen] = useState(false);
-const [step, setStep] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [step, setStep] = useState(1);
   // ✅ Reply state
   const [replyOpenId, setReplyOpenId] = useState(null);
   const [replyText, setReplyText] = useState("");
@@ -263,47 +263,47 @@ const [step, setStep] = useState(1);
     }
   };
 
-    const handleDownloadClick = () => { setIsModalOpen(true); setStep(1); };
-const closeModal = () => setIsModalOpen(false);  // ← yeh missing hai
+  const handleDownloadClick = () => { setIsModalOpen(true); setStep(1); };
+  const closeModal = () => setIsModalOpen(false);  // ← yeh missing hai
 
-const handleModalFormSubmit = async (e) => {
-  e.preventDefault();
+  const handleModalFormSubmit = async (e) => {
+    e.preventDefault();
 
-  if (!captchaData?.captchaId) {
-    toast.error("Captcha not loaded, please wait", { position: "top-right" });
-    dispatch(fetchCaptcha());
-    return;
-  }
-  if (!formData.captchaAnswer.trim()) {
-    toast.error("Please answer the captcha", { position: "top-right" });
-    return;
-  }
+    if (!captchaData?.captchaId) {
+      toast.error("Captcha not loaded, please wait", { position: "top-right" });
+      dispatch(fetchCaptcha());
+      return;
+    }
+    if (!formData.captchaAnswer.trim()) {
+      toast.error("Please answer the captcha", { position: "top-right" });
+      return;
+    }
 
-  const payload = {
-    name: formData.name.trim(),
-    email: formData.email.trim(),
-    country: formData.country.toLowerCase(),
-    phone: Number(formData.phone),
-    projectRequirement: formData.projectRequirement || "",
-    captchaId: captchaData.captchaId,
-    captchaAnswer: Number(formData.captchaAnswer),
+    const payload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      country: formData.country.toLowerCase(),
+      phone: Number(formData.phone),
+      projectRequirement: formData.projectRequirement || "",
+      captchaId: captchaData.captchaId,
+      captchaAnswer: Number(formData.captchaAnswer),
+    };
+
+    const result = await dispatch(submitContactForm(payload));
+
+    if (submitContactForm.fulfilled.match(result)) {
+      toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
+      setFormData({ name: "", email: "", country: "", phone: "", projectRequirement: "", captchaAnswer: "" });
+      dispatch(fetchCaptcha());
+      setStep(2);
+    } else {
+      const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
+      toast.error(errMsg, { position: "top-right" });
+      dispatch(fetchCaptcha());
+      setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
+    }
   };
 
-  const result = await dispatch(submitContactForm(payload));
-
-  if (submitContactForm.fulfilled.match(result)) {
-    toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
-    setFormData({ name: "", email: "", country: "", phone: "", projectRequirement: "", captchaAnswer: "" });
-    dispatch(fetchCaptcha());
-    setStep(2);
-  } else {
-    const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
-    toast.error(errMsg, { position: "top-right" });
-    dispatch(fetchCaptcha());
-    setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
-  }
-};
-  
 
   if (loading) {
     return (
@@ -336,123 +336,123 @@ const handleModalFormSubmit = async (e) => {
   return (
     <div className="min-h-screen bg-background text-foreground font-sans transition-colors duration-300 pb-20">
       {isModalOpen && (
-              <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#040926B2] backdrop-blur-[10px] transition-all duration-300">
-                <div className="bg-card border border-gray-200 dark:border-white/10 w-full max-w-xl rounded-2xl shadow-2xl relative overflow-hidden">
-                  <button onClick={closeModal} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
-                    <X size={24} />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#040926B2] backdrop-blur-[10px] transition-all duration-300">
+          <div className="bg-card border border-gray-200 dark:border-white/10 w-full max-w-xl rounded-2xl shadow-2xl relative overflow-hidden">
+            <button onClick={closeModal} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+              <X size={24} />
+            </button>
+
+            {step === 1 ? (
+              <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-icon mb-1">Want to download PDF?</h2>
+                <p className="text-icon text-sm mb-6 font-light">Enter your details below to get instant access to the file.</p>
+
+                <form onSubmit={handleModalFormSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Your name <span className="text-red-500">*</span></label>
+                    <input
+                      type="text" required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Type here..."
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Email <span className="text-red-500">*</span></label>
+                    <input
+                      type="email" required
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="example@mail.com"
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-icon mb-1.5">Country <span className="text-red-500">*</span></label>
+                      <select
+                        required
+                        value={formData.country}
+                        onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                        className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon focus:outline-none focus:ring-1 focus:ring-orange-500"
+                      >
+                        <option value="">Select</option>
+                        <option value="India">India</option>
+                        <option value="United States">United States</option>
+                        <option value="United Kingdom">United Kingdom</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-icon mb-1.5">Phone number <span className="text-red-500">*</span></label>
+                      <input
+                        type="tel" required
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="Type here..."
+                        className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-icon mb-1.5">Project Requirement (optional)</label>
+                    <textarea
+                      rows="2"
+                      value={formData.requirement}
+                      onChange={(e) => setFormData({ ...formData, requirement: e.target.value })}
+                      placeholder="Type here..."
+                      className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500 resize-none"
+                    />
+                  </div>
+
+                  {/* Dynamic Captcha */}
+                  <div className="bg-white rounded-lg p-3 w-fit flex flex-col gap-2">
+                    <label className="text-[10px] font-bold text-black uppercase">Captcha <span className="text-red-500">*</span></label>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm text-gray-800 font-medium">
+                        {captchaLoading ? "Loading..." : captchaData?.question ? `What is ${captchaData.question} ?` : "Unavailable"}
+                      </span>
+                      <input
+                        type="text" required
+                        value={formData.captchaAnswer}
+                        onChange={(e) => setFormData({ ...formData, captchaAnswer: e.target.value })}
+                        className="w-16 border border-gray-300 rounded px-2 py-1 text-black text-sm focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={formSubmitting}
+                    className="w-full md:w-40 bg-[#FD7306] hover:bg-orange-600 text-white font-bold py-3 rounded-full transition-all text-sm uppercase tracking-wider disabled:opacity-50"
+                  >
+                    {formSubmitting ? "SUBMITTING..." : "Submit"}
                   </button>
-      
-                  {step === 1 ? (
-                    <div className="p-6 md:p-8">
-                      <h2 className="text-2xl font-bold text-icon mb-1">Want to download PDF?</h2>
-                      <p className="text-icon text-sm mb-6 font-light">Enter your details below to get instant access to the file.</p>
-      
-                      <form onSubmit={handleModalFormSubmit} className="space-y-4">
-                        <div>
-                          <label className="block text-xs font-medium text-icon mb-1.5">Your name <span className="text-red-500">*</span></label>
-                          <input
-                            type="text" required
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder="Type here..."
-                            className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                          />
-                        </div>
-      
-                        <div>
-                          <label className="block text-xs font-medium text-icon mb-1.5">Email <span className="text-red-500">*</span></label>
-                          <input
-                            type="email" required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            placeholder="example@mail.com"
-                            className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                          />
-                        </div>
-      
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label className="block text-xs font-medium text-icon mb-1.5">Country <span className="text-red-500">*</span></label>
-                            <select
-                              required
-                              value={formData.country}
-                              onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                              className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            >
-                              <option value="">Select</option>
-                              <option value="India">India</option>
-                              <option value="United States">United States</option>
-                              <option value="United Kingdom">United Kingdom</option>
-                            </select>
-                          </div>
-                          <div>
-                            <label className="block text-xs font-medium text-icon mb-1.5">Phone number <span className="text-red-500">*</span></label>
-                            <input
-                              type="tel" required
-                              value={formData.phone}
-                              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                              placeholder="Type here..."
-                              className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500"
-                            />
-                          </div>
-                        </div>
-      
-                        <div>
-                          <label className="block text-xs font-medium text-icon mb-1.5">Project Requirement (optional)</label>
-                          <textarea
-                            rows="2"
-                            value={formData.requirement}
-                            onChange={(e) => setFormData({ ...formData, requirement: e.target.value })}
-                            placeholder="Type here..."
-                            className="w-full dark:bg-[#1D2659] border border-gray-300 dark:border-[#3E4A92] rounded-lg p-3 text-sm text-icon placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500 resize-none"
-                          />
-                        </div>
-      
-                        {/* Dynamic Captcha */}
-                        <div className="bg-white rounded-lg p-3 w-fit flex flex-col gap-2">
-                          <label className="text-[10px] font-bold text-black uppercase">Captcha <span className="text-red-500">*</span></label>
-                          <div className="flex items-center gap-3">
-                            <span className="text-sm text-gray-800 font-medium">
-                              {captchaLoading ? "Loading..." : captchaData?.question ? `What is ${captchaData.question} ?` : "Unavailable"}
-                            </span>
-                            <input
-                              type="text" required
-                              value={formData.captchaAnswer}
-                              onChange={(e) => setFormData({ ...formData, captchaAnswer: e.target.value })}
-                              className="w-16 border border-gray-300 rounded px-2 py-1 text-black text-sm focus:outline-none"
-                            />
-                          </div>
-                        </div>
-      
-                        <button
-                          type="submit"
-                          disabled={formSubmitting}
-                          className="w-full md:w-40 bg-[#FD7306] hover:bg-orange-600 text-white font-bold py-3 rounded-full transition-all text-sm uppercase tracking-wider disabled:opacity-50"
-                        >
-                          {formSubmitting ? "SUBMITTING..." : "Submit"}
-                        </button>
-                      </form>
+                </form>
+              </div>
+            ) : (
+              <div className="p-10 flex flex-col items-center text-center">
+                <div className="mb-6 relative">
+                  <div className="w-20 h-24 bg-white rounded-md flex items-center justify-center shadow-lg">
+                    <FileText size={48} className="text-red-600" />
+                    <div className="absolute -bottom-2 -right-2 bg-blue-600 rounded-full p-1 border-2 border-[#101732]">
+                      <Download size={16} className="text-white" />
                     </div>
-                  ) : (
-                    <div className="p-10 flex flex-col items-center text-center">
-                      <div className="mb-6 relative">
-                        <div className="w-20 h-24 bg-white rounded-md flex items-center justify-center shadow-lg">
-                          <FileText size={48} className="text-red-600" />
-                          <div className="absolute -bottom-2 -right-2 bg-blue-600 rounded-full p-1 border-2 border-[#101732]">
-                            <Download size={16} className="text-white" />
-                          </div>
-                        </div>
-                      </div>
-                      <h2 className="text-2xl font-bold text-icon mb-2">Your Download is Ready</h2>
-                      <p className="text-icon opacity-90 text-sm mb-8">Your file is ready. Click the button below to start downloading.</p>
-                      <button onClick={closeModal} className="bg-[#FD7306] hover:bg-orange-600 text-white font-bold px-10 py-3 rounded-full transition-all text-sm uppercase tracking-wider flex items-center gap-2">
-                        <Download size={18} /> Download PDF
-                      </button>
-                    </div>
-                  )}
+                  </div>
                 </div>
+                <h2 className="text-2xl font-bold text-icon mb-2">Your Download is Ready</h2>
+                <p className="text-icon opacity-90 text-sm mb-8">Your file is ready. Click the button below to start downloading.</p>
+                <button onClick={closeModal} className="bg-[#FD7306] hover:bg-orange-600 text-white font-bold px-10 py-3 rounded-full transition-all text-sm uppercase tracking-wider flex items-center gap-2">
+                  <Download size={18} /> Download PDF
+                </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
       {/* Hero Section */}
       <div className="bg-gray-100 dark:bg-[#100A44] border-b border-gray-200 dark:border-white/10 pt-28 pb-12 px-4 md:px-8">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 items-center justify-between">
@@ -503,22 +503,22 @@ const handleModalFormSubmit = async (e) => {
           <section>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Business Overview</h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
-            <p className="text-sm md:text-base leading-relaxed text-gray-500 dark:text-[#BACCDE]">
-              {currentIdea.fullDescription || currentIdea.description}
+            <p className="text-sm md:text-base leading-relaxed text-gray-500 dark:text-[#BACCDE] whitespace-pre-line">
+              {currentIdea.businessOverview || currentIdea.description}
             </p>
           </section>
 
           <div className="bg-[#370D25] border border-[#BD0B0B] rounded-xl p-6">
             <h3 className="text-xl font-semibold text-white mb-2">The Problem</h3>
-            <p className="text-sm text-white leading-relaxed">
-              Customers face delays in grocery deliveries due to centralized warehouses and inefficient routing. Small local stores struggle to compete with large eCommerce platforms and lack digital presence. Additionally, users often receive out-of-stock items or delayed substitutions, leading to poor experience.
+            <p className="text-sm text-white leading-relaxed whitespace-pre-line">
+              {currentIdea.problem?.replace("The Problem", "").trim()}
             </p>
           </div>
 
           <div className="bg-[#082846] border border-[#1C8D99] rounded-xl p-6">
             <h3 className="text-xl font-semibold text-white mb-2">The Solution</h3>
-            <p className="text-sm text-white leading-relaxed">
-              An AI model trained entirely on your database. It responds with context, resolves basic support requests, and seamlessly transfers complex issues to human agents.
+            <p className="text-sm text-white leading-relaxed whitespace-pre-line">
+              {currentIdea.solution?.replace("The Solution", "").trim()}
             </p>
           </div>
 
@@ -526,22 +526,30 @@ const handleModalFormSubmit = async (e) => {
             <h2 className="text-xl font-semibold text-icon mb-4">How It Works</h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
             <ul className="space-y-3 text-sm md:text-base text-gray-700 dark:text-gray-300">
-              <li className="dark:text-[#BACCDE] text-sm"><strong className="text-icon font-semibold">1. Data Ingestion :</strong> Connect databases, knowledge base, and past support tickets.</li>
-              <li className="dark:text-[#BACCDE] text-sm"><strong className="text-icon font-semibold">2. Training :</strong> The platform processes data to create accurate AI embeddings.</li>
-              <li className="dark:text-[#BACCDE] text-sm"><strong className="text-icon font-semibold">3. Deployment :</strong> The AI chatbot is integrated into client websites.</li>
-              <li className="dark:text-[#BACCDE] text-sm"><strong className="text-icon font-semibold">4. Workflow :</strong> AI filters queries and creates tickets for complex issues.</li>
+              {currentIdea.howItWorks?.slice(1).map((item, index) => (
+                <li
+                  key={index}
+                  className="dark:text-[#BACCDE] text-sm"
+                >
+                  {item.replace(/\r/g, "")}
+                </li>
+              ))}
             </ul>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-icon mb-4">Revenue Model</h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
-            <p className="text-sm dark:text-[#BACCDE] mb-4">Subscription-based model with tiered pricing based on ticket volume.</p>
-            <ul className="space-y-2 text-sm dark:text-[#BACCDE]">
-              <li><strong className="text-icon font-semibold">Starter :</strong> $49/mo (up to 500 conversations)</li>
-              <li><strong className="text-icon font-semibold">Pro :</strong> $149/mo (up to 2,000 conversations + custom UI)</li>
-              <li><strong className="text-icon font-semibold">Enterprise :</strong> $49/mo (Custom integrations, dedicated account manager)</li>
-            </ul>
+            <div className="space-y-2">
+              {currentIdea.revenueModel?.slice(1).map((item, index) => (
+                <p
+                  key={index}
+                  className="text-sm dark:text-[#BACCDE]"
+                >
+                  {item.replace(/\r/g, "")}
+                </p>
+              ))}
+            </div>
           </section>
 
           <section>
@@ -550,23 +558,27 @@ const handleModalFormSubmit = async (e) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Investment Required</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">${currentIdea.investmentMin} - ${currentIdea.investmentMax}</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Server costs, API credits, initial marketing, software setup)</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {currentIdea?.executionBreakdown?.investmentRequired}
+                </p>
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Timeline to Launch</h4>
-                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">4 - 6 Weeks</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(For building MVP and launching beta)</p>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea?.executionBreakdown?.investmentRequired}
+                </p>
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Required Team</h4>
-                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">{currentIdea.teamSize || "1-2 Founders"}</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Based on expected execution operations scale)</p>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea?.executionBreakdown?.requiredTeam}
+                </p>
               </div>
               <div className="bg-card border border-gray-300 dark:border-[#242F70] p-6 rounded-xl">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Profit Margin</h4>
-                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">{currentIdea.profitMargin}%+</p>
-                <p className="text-xs dark:text-[#BACCDE] mt-2">(Low ongoing costs relative to subscription pricing)</p>
+                <p className="text-sm text-gray-600 dark:text-[#BACCDE]">
+                  {currentIdea?.executionBreakdown?.profitMarginDetail}
+                </p>
               </div>
             </div>
           </section>
@@ -582,26 +594,29 @@ const handleModalFormSubmit = async (e) => {
               </div>
             ) : null}
             <ul className="space-y-2 text-sm text-gray-700 dark:text-[#BACCDE]">
-              <li><strong className="text-gray-900 dark:text-white font-semibold">Frontend :</strong> React, Tailwind CSS, Next.js</li>
-              <li><strong className="text-gray-900 dark:text-white font-semibold">Backend :</strong> Node.js, Python, PostgreSQL / Pinecone</li>
-              <li><strong className="text-gray-900 dark:text-white font-semibold">AI Models :</strong> OpenAI API (GPT-4), LangChain, Anthropic (Claude)</li>
-              <li><strong className="text-gray-900 dark:text-white font-semibold">Hosting :</strong> Vercel, AWS</li>
+              {currentIdea.techStack?.slice(1).map((item, index) => (
+                <li key={index}>
+                  {item.replace(/\r/g, "")}
+                </li>
+              ))}
             </ul>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Marketing Strategy (How to get first 10 customers)</h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
-            <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
-              Build a targeted list of prospects using Omni-channel. Offer them a free trial of a custom chatbot for their brand. Partner with agencies making them the exact strategy of "we reduce the support tickets for their clients by 40%". Email the list with an approach of offering value first, close deal later. Cold email {">"} LinkedIn {">"} X {">"} YouTube.
+            <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed whitespace-pre-line">
+              {currentIdea.marketingStrategy
+                ?.replace("Marketing Strategy (How to get first 10 customers)", "")
+                .trim()}
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Conclusion</h2>
             <div className="w-full border-t-2 border-dashed border-gray-300 dark:border-[#1C234D] mb-6"></div>
-            <p className="text-sm text-gray-700 dark:text-[#BACCDE] leading-relaxed">
-              B2B is highly lucrative. High margin business. You build the tech tool exclusively, no one requires a big team, and earning beyond a zero to one is high. Once the retention is built up nicely, MRR expands to five and six figures within a year with minimal stress.
+            <p>
+              {currentIdea?.conclusion}
             </p>
           </section>
 
@@ -610,11 +625,10 @@ const handleModalFormSubmit = async (e) => {
             <button
               onClick={handleLikeClick}
               disabled={likeLoading}
-              className={`flex items-center gap-2 border px-4 py-2 text-sm font-normal transition-colors rounded-3xl ${
-                showLiked
-                  ? "border-[#FD7306] text-[#FD7306] bg-[#FD7306]/5"
-                  : "text-icon border-gray-200 dark:border-[#363B57] hover:bg-gray-100 dark:hover:bg-white/5"
-              }`}
+              className={`flex items-center gap-2 border px-4 py-2 text-sm font-normal transition-colors rounded-3xl ${showLiked
+                ? "border-[#FD7306] text-[#FD7306] bg-[#FD7306]/5"
+                : "text-icon border-gray-200 dark:border-[#363B57] hover:bg-gray-100 dark:hover:bg-white/5"
+                }`}
             >
               <ThumbsUp size={16} fill={showLiked ? "currentColor" : "none"} />
               {likeLoading ? "..." : showLiked ? "Liked" : "Like"}
@@ -623,11 +637,10 @@ const handleModalFormSubmit = async (e) => {
             <button
               onClick={handleSaveClick}
               disabled={toggleLoading}
-              className={`flex items-center gap-2 border px-4 py-2 text-sm font-normal transition-colors rounded-3xl ${
-                isBookmarked
-                  ? "border-[#FD7306] text-[#FD7306] bg-[#FD7306]/5"
-                  : "text-icon border-gray-200 dark:border-[#363B57] hover:bg-gray-100 dark:hover:bg-white/5"
-              }`}
+              className={`flex items-center gap-2 border px-4 py-2 text-sm font-normal transition-colors rounded-3xl ${isBookmarked
+                ? "border-[#FD7306] text-[#FD7306] bg-[#FD7306]/5"
+                : "text-icon border-gray-200 dark:border-[#363B57] hover:bg-gray-100 dark:hover:bg-white/5"
+                }`}
             >
               <Bookmark size={16} fill={isBookmarked ? "currentColor" : "none"} />
               {toggleLoading ? "Saving..." : isBookmarked ? "Saved" : "Save"}
