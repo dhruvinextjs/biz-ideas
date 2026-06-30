@@ -173,65 +173,82 @@ export default function DetailPage() {
 
   // ✅ Like handler with localStorage persistence
   const handleLikeClick = async () => {
-    if (!currentIdea?._id) return;
+  if (!currentIdea?._id) return;
 
-    const result = await dispatch(toggleLikeIdea(currentIdea._id));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (toggleLikeIdea.fulfilled.match(result)) {
-      const liked = result.payload?.liked;
-      toast.success(liked ? "Liked!" : "Like removed", { position: "top-right" });
+  const result = await dispatch(toggleLikeIdea(currentIdea._id));
 
-      setLikedIdeaIds((prev) => {
-        let updated;
-        if (liked) {
-          updated = prev.includes(currentIdea._id) ? prev : [...prev, currentIdea._id];
-        } else {
-          updated = prev.filter((ideaId) => ideaId !== currentIdea._id);
-        }
-        saveLikedIdeasToStorage(updated);
-        return updated;
-      });
-    } else {
-      toast.error("Failed to update like", { position: "top-right" });
-    }
-  };
+  if (toggleLikeIdea.fulfilled.match(result)) {
+    const liked = result.payload?.liked;
+    toast.success(liked ? "Liked!" : "Like removed", { position: "top-right" });
 
-  // ✅ Bookmark handler
-  const handleSaveClick = async () => {
-    if (!currentIdea?._id) return;
+    setLikedIdeaIds((prev) => {
+      let updated;
+      if (liked) {
+        updated = prev.includes(currentIdea._id) ? prev : [...prev, currentIdea._id];
+      } else {
+        updated = prev.filter((ideaId) => ideaId !== currentIdea._id);
+      }
+      saveLikedIdeasToStorage(updated);
+      return updated;
+    });
+  } else {
+    toast.error("Failed to update like", { position: "top-right" });
+  }
+};
 
-    const result = await dispatch(
-      toggleBookmark({ itemId: currentIdea._id, itemType: "idea" })
-    );
+const handleSaveClick = async () => {
+  if (!currentIdea?._id) return;
 
-    if (toggleBookmark.fulfilled.match(result)) {
-      toast.success(result.payload?.message || "Bookmark updated", { position: "top-right" });
-      dispatch(fetchBookmarks());
-    } else {
-      toast.error("Failed to update bookmark", { position: "top-right" });
-    }
-  };
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
+
+  const result = await dispatch(
+    toggleBookmark({ itemId: currentIdea._id, itemType: "idea" })
+  );
+
+  if (toggleBookmark.fulfilled.match(result)) {
+    toast.success(result.payload?.message || "Bookmark updated", { position: "top-right" });
+    dispatch(fetchBookmarks());
+  } else {
+    toast.error("Failed to update bookmark", { position: "top-right" });
+  }
+};
 
   // ✅ Post comment handler
   const handlePostComment = async () => {
-    if (!commentText.trim()) {
-      toast.error("Please write something before posting", { position: "top-right" });
-      return;
-    }
+  if (!commentText.trim()) {
+    toast.error("Please write something before posting", { position: "top-right" });
+    return;
+  }
 
-    const result = await dispatch(postComment({
-      itemId: currentIdea._id,
-      itemType: "idea",
-      text: commentText.trim(),
-    }));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (postComment.fulfilled.match(result)) {
-      toast.success("Comment posted!", { position: "top-right" });
-      setCommentText("");
-    } else {
-      toast.error("Failed to post comment", { position: "top-right" });
-    }
-  };
+  const result = await dispatch(postComment({
+    itemId: currentIdea._id,
+    itemType: "idea",
+    text: commentText.trim(),
+  }));
+
+  if (postComment.fulfilled.match(result)) {
+    toast.success("Comment posted!", { position: "top-right" });
+    setCommentText("");
+  } else {
+    toast.error("Failed to post comment", { position: "top-right" });
+  }
+};
 
   // ✅ Reply toggle handler
   const handleReplyToggle = (commentId) => {
@@ -245,65 +262,85 @@ export default function DetailPage() {
   };
 
   // ✅ Reply submit handler
-  const handleReplySubmit = async (commentId) => {
-    if (!replyText.trim()) {
-      toast.error("Please write a reply", { position: "top-right" });
-      return;
-    }
+ const handleReplySubmit = async (commentId) => {
+  if (!replyText.trim()) {
+    toast.error("Please write a reply", { position: "top-right" });
+    return;
+  }
 
-    const result = await dispatch(postReply({ commentId, text: replyText.trim() }));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (postReply.fulfilled.match(result)) {
-      toast.success(result.payload?.message || "Reply added successfully", { position: "top-right" });
-      setReplyText("");
-      setReplyOpenId(null);
-      dispatch(fetchComments({ itemId: id, itemType: "idea" }));
-    } else {
-      toast.error("Failed to post reply", { position: "top-right" });
-    }
+  const result = await dispatch(postReply({ commentId, text: replyText.trim() }));
+
+  if (postReply.fulfilled.match(result)) {
+    toast.success(result.payload?.message || "Reply added successfully", { position: "top-right" });
+    setReplyText("");
+    setReplyOpenId(null);
+    dispatch(fetchComments({ itemId: id, itemType: "idea" }));
+  } else {
+    toast.error("Failed to post reply", { position: "top-right" });
+  }
+};
+
+  const handleDownloadClick = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
+  setIsModalOpen(true);
+  setStep(1);
+};
+
+const closeModal = () => setIsModalOpen(false);
+
+ const handleModalFormSubmit = async (e) => {
+  e.preventDefault();
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
+
+  if (!captchaData?.captchaId) {
+    toast.error("Captcha not loaded, please wait", { position: "top-right" });
+    dispatch(fetchCaptcha());
+    return;
+  }
+  if (!formData.captchaAnswer.trim()) {
+    toast.error("Please answer the captcha", { position: "top-right" });
+    return;
+  }
+
+  const payload = {
+    name: formData.name.trim(),
+    email: formData.email.trim(),
+    country: formData.country.toLowerCase(),
+    phone: Number(formData.phone),
+    projectRequirement: formData.projectRequirement || "",
+    captchaId: captchaData.captchaId,
+    captchaAnswer: Number(formData.captchaAnswer),
   };
 
-  const handleDownloadClick = () => { setIsModalOpen(true); setStep(1); };
-  const closeModal = () => setIsModalOpen(false);  // ← yeh missing hai
+  const result = await dispatch(submitContactForm(payload));
 
-  const handleModalFormSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!captchaData?.captchaId) {
-      toast.error("Captcha not loaded, please wait", { position: "top-right" });
-      dispatch(fetchCaptcha());
-      return;
-    }
-    if (!formData.captchaAnswer.trim()) {
-      toast.error("Please answer the captcha", { position: "top-right" });
-      return;
-    }
-
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      country: formData.country.toLowerCase(),
-      phone: Number(formData.phone),
-      projectRequirement: formData.projectRequirement || "",
-      captchaId: captchaData.captchaId,
-      captchaAnswer: Number(formData.captchaAnswer),
-    };
-
-    const result = await dispatch(submitContactForm(payload));
-
-    if (submitContactForm.fulfilled.match(result)) {
-      toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
-      setFormData({ name: "", email: "", country: "", phone: "", projectRequirement: "", captchaAnswer: "" });
-      dispatch(fetchCaptcha());
-      setStep(2);
-    } else {
-      const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
-      toast.error(errMsg, { position: "top-right" });
-      dispatch(fetchCaptcha());
-      setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
-    }
-  };
-
+  if (submitContactForm.fulfilled.match(result)) {
+    toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
+    setFormData({ name: "", email: "", country: "", phone: "", projectRequirement: "", captchaAnswer: "" });
+    dispatch(fetchCaptcha());
+    setStep(2);
+  } else {
+    const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
+    toast.error(errMsg, { position: "top-right" });
+    dispatch(fetchCaptcha());
+    setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
+  }
+};
 
   if (loading) {
     return (

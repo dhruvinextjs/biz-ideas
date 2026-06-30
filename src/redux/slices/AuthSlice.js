@@ -7,14 +7,11 @@ export const checkUsername = createAsyncThunk(
   async (data, thunkAPI) => {
     try {
       const response = await PostUrl("/api/auth/check-username", data);
-
-      // ✅ Local storage yaha bhi kar sakte ho (optional)
       localStorage.setItem("token", response.token);
       localStorage.setItem("userId", response.user.id);
-
       return response;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return thunkAPI.rejectWithValue(error?.response?.data || error);
     }
   },
 );

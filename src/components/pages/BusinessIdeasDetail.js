@@ -132,10 +132,15 @@ export default function DetailPage({ params }) {
     dispatch(fetchCaptcha());
   }, [dispatch]);
 
-  const handleDownloadClick = () => {
-    setIsModalOpen(true);
-    setStep(1);
-  };
+ const handleDownloadClick = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
+  setIsModalOpen(true);
+  setStep(1);
+};
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -207,25 +212,30 @@ export default function DetailPage({ params }) {
     dispatch(fetchBookmarks()); // ✅ GET call on mount
   }, [dispatch, ideaId]);
 
-  // handleSaveClick function replace karo
-  const handleSaveClick = async () => {
-    if (!currentIdea?._id) return;
+ const handleSaveClick = async () => {
+  if (!currentIdea?._id) return;
 
-    const payload = {
-      itemId: currentIdea._id,
-      itemType: "idea",
-    };
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    const result = await dispatch(toggleBookmark(payload));
-
-    if (toggleBookmark.fulfilled.match(result)) {
-      const message = result.payload?.message || "Bookmark updated";
-      toast.success(message, { position: "top-right" });
-      dispatch(fetchBookmarks()); // ✅ UI refresh karo GET se
-    } else {
-      toast.error("Failed to update bookmark", { position: "top-right" });
-    }
+  const payload = {
+    itemId: currentIdea._id,
+    itemType: "idea",
   };
+
+  const result = await dispatch(toggleBookmark(payload));
+
+  if (toggleBookmark.fulfilled.match(result)) {
+    const message = result.payload?.message || "Bookmark updated";
+    toast.success(message, { position: "top-right" });
+    dispatch(fetchBookmarks());
+  } else {
+    toast.error("Failed to update bookmark", { position: "top-right" });
+  }
+};
 
   // ✅ Contact form (sidebar) handlers
   const handleContactChange = (e) => {
@@ -288,33 +298,38 @@ export default function DetailPage({ params }) {
   };
 
   // ✅ Like / Unlike handler
-  const handleLikeClick = async () => {
-    if (!currentIdea?._id) return;
+ const handleLikeClick = async () => {
+  if (!currentIdea?._id) return;
 
-    const result = await dispatch(toggleLikeIdea(currentIdea._id));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (toggleLikeIdea.fulfilled.match(result)) {
-      const liked = result.payload?.liked;
-      const message = liked ? "Liked!" : "Like removed";
-      toast.success(message, { position: "top-right" });
+  const result = await dispatch(toggleLikeIdea(currentIdea._id));
 
-      // ✅ localStorage me persist karo — sirf dislike par hi id remove hogi
-      setLikedIdeaIds((prev) => {
-        let updated;
-        if (liked) {
-          updated = prev.includes(currentIdea._id)
-            ? prev
-            : [...prev, currentIdea._id];
-        } else {
-          updated = prev.filter((id) => id !== currentIdea._id);
-        }
-        saveLikedIdeasToStorage(updated);
-        return updated;
-      });
-    } else {
-      toast.error("Failed to update like", { position: "top-right" });
-    }
-  };
+  if (toggleLikeIdea.fulfilled.match(result)) {
+    const liked = result.payload?.liked;
+    const message = liked ? "Liked!" : "Like removed";
+    toast.success(message, { position: "top-right" });
+
+    setLikedIdeaIds((prev) => {
+      let updated;
+      if (liked) {
+        updated = prev.includes(currentIdea._id)
+          ? prev
+          : [...prev, currentIdea._id];
+      } else {
+        updated = prev.filter((id) => id !== currentIdea._id);
+      }
+      saveLikedIdeasToStorage(updated);
+      return updated;
+    });
+  } else {
+    toast.error("Failed to update like", { position: "top-right" });
+  }
+};
 
   // ✅ Reply handlers
   const handleReplyToggle = (commentId) => {
@@ -343,7 +358,7 @@ export default function DetailPage({ params }) {
       setReplyOpenId(null);
       dispatch(fetchComments({ itemId: ideaId, itemType: "idea" })); // refresh so new reply shows up
     } else {
-      toast.error("Failed to post reply", { position: "top-right" });
+      toast.error("please login", { position: "top-right" });
     }
   };
 

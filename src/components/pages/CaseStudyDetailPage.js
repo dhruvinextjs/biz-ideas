@@ -70,83 +70,101 @@ export default function CaseStudyDetailPage() {
   const closeModal = () => setIsModalOpen(false);
 
   const handleModalFormSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!captchaData?.captchaId) {
-      toast.error("Captcha not loaded, please wait", { position: "top-right" });
-      dispatch(fetchCaptcha());
-      return;
-    }
-    if (!formData.captchaAnswer.trim()) {
-      toast.error("Please answer the captcha", { position: "top-right" });
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      country: formData.country,
-      phone: formData.phone.trim(),
-      projectRequirement: formData.requirement.trim(),
-      captchaId: captchaData.captchaId,
-      captchaAnswer: Number(formData.captchaAnswer),
-    };
+  if (!captchaData?.captchaId) {
+    toast.error("Captcha not loaded, please wait", { position: "top-right" });
+    dispatch(fetchCaptcha());
+    return;
+  }
+  if (!formData.captchaAnswer.trim()) {
+    toast.error("Please answer the captcha", { position: "top-right" });
+    return;
+  }
 
-    const result = await dispatch(submitContactForm(payload));
-
-    if (submitContactForm.fulfilled.match(result)) {
-      toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
-      setFormData({ name: "", email: "", country: "", phone: "", requirement: "", captchaAnswer: "" });
-      dispatch(fetchCaptcha());
-      setStep(2);
-    } else {
-      const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
-      toast.error(errMsg, { position: "top-right" });
-      dispatch(fetchCaptcha());
-      setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
-    }
+  const payload = {
+    name: formData.name.trim(),
+    email: formData.email.trim(),
+    country: formData.country,
+    phone: formData.phone.trim(),
+    projectRequirement: formData.requirement.trim(),
+    captchaId: captchaData.captchaId,
+    captchaAnswer: Number(formData.captchaAnswer),
   };
+
+  const result = await dispatch(submitContactForm(payload));
+
+  if (submitContactForm.fulfilled.match(result)) {
+    toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
+    setFormData({ name: "", email: "", country: "", phone: "", requirement: "", captchaAnswer: "" });
+    dispatch(fetchCaptcha());
+    setStep(2);
+  } else {
+    const errMsg = typeof result.payload === "string" ? result.payload : result.payload?.message || "Failed to send message";
+    toast.error(errMsg, { position: "top-right" });
+    dispatch(fetchCaptcha());
+    setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
+  }
+};
   const handleSaveClick = async () => {
-    if (!id) return;
+  if (!id) return;
 
-    const result = await dispatch(toggleBookmark({
-      itemId: currentCaseStudy._id,
-      itemType: "case-study",
-    }));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (toggleBookmark.fulfilled.match(result)) {
-      const { bookmarked, message } = result.payload;
-      setIsBookmarked(bookmarked);
-      if (bookmarked) {
-        localStorage.setItem(`bookmarked_casestudy_${id}`, "true");
-      } else {
-        localStorage.removeItem(`bookmarked_casestudy_${id}`);
-      }
-      toast.success(message, { position: "top-right" });
+  const result = await dispatch(toggleBookmark({
+    itemId: currentCaseStudy._id,
+    itemType: "case-study",
+  }));
+
+  if (toggleBookmark.fulfilled.match(result)) {
+    const { bookmarked, message } = result.payload;
+    setIsBookmarked(bookmarked);
+    if (bookmarked) {
+      localStorage.setItem(`bookmarked_casestudy_${id}`, "true");
     } else {
-      toast.error("Failed to update bookmark", { position: "top-right" });
+      localStorage.removeItem(`bookmarked_casestudy_${id}`);
     }
-  };
+    toast.success(message, { position: "top-right" });
+  } else {
+    toast.error("Failed to update bookmark", { position: "top-right" });
+  }
+};
 
-  const handleLikeClick = async () => {
-    if (!currentCaseStudy?._id) return;
+const handleLikeClick = async () => {
+  if (!currentCaseStudy?._id) return;
 
-    const result = await dispatch(toggleLike(currentCaseStudy._id));
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (toggleLike.fulfilled.match(result)) {
-      const { upvoted, upvotes } = result.payload;
-      setIsLiked(upvoted);
-      setLikesCount(upvotes);
-      if (upvoted) {
-        localStorage.setItem(`liked_casestudy_${id}`, "true");
-      } else {
-        localStorage.removeItem(`liked_casestudy_${id}`);
-      }
-      toast.success(upvoted ? "Liked!" : "Like removed", { position: "top-right" });
+  const result = await dispatch(toggleLike(currentCaseStudy._id));
+
+  if (toggleLike.fulfilled.match(result)) {
+    const { upvoted, upvotes } = result.payload;
+    setIsLiked(upvoted);
+    setLikesCount(upvotes);
+    if (upvoted) {
+      localStorage.setItem(`liked_casestudy_${id}`, "true");
     } else {
-      toast.error("Failed to update like", { position: "top-right" });
+      localStorage.removeItem(`liked_casestudy_${id}`);
     }
-  };
+    toast.success(upvoted ? "Liked!" : "Like removed", { position: "top-right" });
+  } else {
+    toast.error("Failed to update like", { position: "top-right" });
+  }
+};
 
   const contents = [
     { id: "company-overview", title: "1. Company Overview" },

@@ -262,8 +262,8 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <Link
-                  href="#"
+                <Link   
+                  href="/signup"
                   className="text-[#FB8122] font-bold flex items-center gap-2"
                 >
                   Join <MoveRight size={16} />

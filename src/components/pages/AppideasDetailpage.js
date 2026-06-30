@@ -188,7 +188,7 @@ export default function DetailPage() {
         return updated;
       });
     } else {
-      toast.error("Failed to update like", { position: "top-right" });
+      toast.error("please login", { position: "top-right" });
     }
   };
 
@@ -203,7 +203,7 @@ export default function DetailPage() {
       toast.success(result.payload?.message || "Bookmark updated", { position: "top-right" });
       dispatch(fetchBookmarks());
     } else {
-      toast.error("Failed to update bookmark", { position: "top-right" });
+      toast.error("please login", { position: "top-right" });
     }
   };
 
@@ -223,7 +223,7 @@ export default function DetailPage() {
       toast.success("Comment posted!", { position: "top-right" });
       setCommentText("");
     } else {
-      toast.error("Failed to post comment", { position: "top-right" });
+      toast.error("please login", { position: "top-right" });
     }
   };
 
@@ -253,53 +253,60 @@ export default function DetailPage() {
       setReplyOpenId(null);
       dispatch(fetchComments({ itemId: id, itemType: "idea" }));
     } else {
-      toast.error("Failed to post reply", { position: "top-right" });
+      toast.error("please login", { position: "top-right" });
     }
   };
 
   const handleDownloadClick = () => { setIsModalOpen(true); setStep(1); };
-  const handleModalFormSubmit = async (e) => {
-    e.preventDefault();
+ const handleModalFormSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!captchaData?.captchaId) {
-      toast.error("Captcha not loaded, please wait", { position: "top-right" });
-      dispatch(fetchCaptcha());
-      return;
-    }
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login", { position: "top-right" });
+    return;
+  }
 
-    if (!formData.captchaAnswer.trim()) {
-      toast.error("Please answer the captcha", { position: "top-right" });
-      return;
-    }
+  if (!captchaData?.captchaId) {
+    toast.error("Captcha not loaded, please wait", { position: "top-right" });
+    dispatch(fetchCaptcha());
+    return;
+  }
 
-    const payload = {
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      country: formData.country,
-      phone: formData.phone.trim(),
-      projectRequirement: formData.requirement.trim(),
-      captchaId: captchaData.captchaId,
-      captchaAnswer: Number(formData.captchaAnswer),
-    };
+  if (!formData.captchaAnswer.trim()) {
+    toast.error("Please answer the captcha", { position: "top-right" });
+    return;
+  }
 
-    const result = await dispatch(submitContactForm(payload));
-
-    if (submitContactForm.fulfilled.match(result)) {
-      toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
-      setFormData(initialContactState);
-      dispatch(clearFormStatus());
-      dispatch(fetchCaptcha());
-      setStep(2); // ← success pe download screen
-    } else {
-      const errMsg =
-        typeof result.payload === "string"
-          ? result.payload
-          : result.payload?.message || "Failed to send message";
-      toast.error(errMsg, { position: "top-right" });
-      dispatch(fetchCaptcha());
-      setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
-    }
+  const payload = {
+    name: formData.name.trim(),
+    email: formData.email.trim(),
+    country: formData.country,
+    phone: formData.phone.trim(),
+    projectRequirement: formData.requirement.trim(),
+    captchaId: captchaData.captchaId,
+    captchaAnswer: Number(formData.captchaAnswer),
   };
+
+  const result = await dispatch(submitContactForm(payload));
+
+  if (submitContactForm.fulfilled.match(result)) {
+    toast.success(result.payload?.message || "Message sent successfully", { position: "top-right" });
+    setFormData(initialContactState);
+    dispatch(clearFormStatus());
+    dispatch(fetchCaptcha());
+    setStep(2);
+  } else {
+    const errMsg =
+      typeof result.payload === "string"
+        ? result.payload
+        : result.payload?.message || "Failed to send message";
+    toast.error(errMsg, { position: "top-right" });
+    dispatch(fetchCaptcha());
+    setFormData((prev) => ({ ...prev, captchaAnswer: "" }));
+  }
+};
+
   const closeModal = () => setIsModalOpen(false);
 
   if (singleLoading) {
